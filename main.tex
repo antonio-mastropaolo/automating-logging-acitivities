@@ -1,0 +1,77 @@
+\documentclass[10pt,conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{xspace}
+\usepackage{fontawesome}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{tikz}
+\usepackage{soul}
+\usepackage{makecell}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fontawesome}
+
+\newcommand{\ie}{\emph{i.e.,}\xspace}
+\newcommand{\eg}{\emph{e.g.,}\xspace}
+\newcommand{\etc}{etc.\xspace}
+\newcommand{\etal}{\emph{et~al.}\xspace}
+\newcommand{\secref}[1]{Section~\ref{#1}\xspace}
+\newcommand{\chapref}[1]{Chapter~\ref{#1}\xspace}
+\newcommand{\appref}[1]{Appendix~\ref{#1}\xspace}
+\newcommand{\figref}[1]{Fig.~\ref{#1}\xspace}
+\newcommand{\listref}[1]{Listing~\ref{#1}\xspace}
+\newcommand{\tabref}[1]{Table~\ref{#1}\xspace}
+\newcommand{\tool}[1]{{\sc #1}\xspace}
+
+\newcommand{\approach}{APPROACH\xspace}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+		\node[shape=circle,draw,inner sep=1pt] (char) {#1};}}
+		
+		
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+
+\begin{document}
+
+\title{Combining Deep Learning and Information Retrieval to Generate Complete Log Statements}
+
+%\author{
+%\IEEEauthorblockN{Antonio Mastropaolo, Luca Pascarella, Gabriele Bavota}
+%\IEEEauthorblockA{\textit{Software Institute -- USI Universit\`{a} della Svizzera italiana, Switzerland}}
+%}
+
+\maketitle
+
+\begin{abstract}
+TBD
+\end{abstract}
+
+\begin{IEEEkeywords}
+
+\end{IEEEkeywords}
+
+\input{introduction}
+\input{approach}
+\input{design}
+\input{results}
+\input{threats}
+\input{related}
+\input{conclusion}
+
+%\section*{Acknowledgment}
+%This project has received funding from the European Research Council (ERC) under the European Union's Horizon 2020 research and innovation programme (grant agreement No. 851720). 
+
+\bibliography{main}
+\bibliographystyle{IEEEtran}
+
+\end{document}
