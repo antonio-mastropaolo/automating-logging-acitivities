@@ -56,27 +56,31 @@ This left us with a dataset of 13,100,955 Java methods of which XXXX contain at 
 
 
 
-%\begin{figure}[h]
-%	\centering
-%	\includegraphics[width=\textwidth]{auxiliary/images/pretraining_ds.pdf}
-%	\caption{Java method pre-training input and target sequences}
-%	\label{pretraining-ds}
-%\end{figure}
+\begin{figure}[h!]
+	\label{pre-training}
+	\includegraphics[width=\columnwidth]{img/pre-training.pdf}
+	\caption{Example of pre-training instance.}
+\end{figure}
 
 
 
 
 \subsubsection{Fine-tuning Dataset}
-We used all the methods having at least one log statement to build the fine-tuning dataset.
-Precisely, the fine-tuning dataset has been split into 80\% training, 10\% validation, and 10\% test. While the instances featuring the test set have been used to assess the performance of our model (\emph{i.e.}, its ability to generate complete log statements and inject them in the correct location) (Section \ref{resultsdiscussion-1}), the validation set was used to find the best configuration of hyperparameters \secref{training}.
-%To avoid overfitting the model, we used the validation dataset to perform early-stopping (Section \ref{t5-finetuning}).
+To build the fine-tuning dataset that replicate what have been done by Mastropaolo \etal \cite{mastropaolo2022using}, we pre-process each training instance (\ie \java method in the training-set) by removing one log statement at a time from the \java method. This process, leaves us with a pair $<M_i, M_t>$ featured by the input and the target sequence in which $M_i$ represents the original \java method $M$ without the target log statement, while $M_t$ is the original \emph{Java} method equivalent to $M$. For those methods containing more than one log statement, we created $n$ pairs of input-target sequences, with $n$ being the number of log statements in the method. To ensure that after the log statement removal all the instances are still valid Java methods, we parsed each instance we created using JavaParser \cite{} and removed all the instances the tool was not able to parse or instances that after the instrumentation have been duplicated. Finally, the fine-tuning dataset replicating the approach implemented by Mastropaolo \etal \cite{mastropaolo2022using}, has been split into 80\% training, 10\% validation, and 10\% test. In \tabref{tab:} are reported the number of entries in each dataset. While the instances featuring the test set have been used to assess the performance of our model (\emph{i.e.}, its ability to generate complete log statements and inject them in the correct location, the validation set was used to find the best configuration of hyperparameters \secref{sec:training}. Later, we used the validation dataset also to perform early-stopping (Section \ref{t5-finetuning}) taming the over-fitting problem.
+
+As described in \secref{sec:intro}, our multi-log injection approach is built on top of two separate models: (i) a classification model that predict whether a method requires or not log statements  and, (ii) the model performing the injection (if needed) within the \java method we provide as input.
+
+For the latter (\ie multi-log injection model), the fine-tuning dataset has been built applying the following procedure: for each method featuring the 253,501 instances having logs, we chose an arbitrary number $k$ from 0 to $n$, where $n$ is the number of log statements in the method. Then, we randomly select $k$ log statements out of the method’s $n$ logs that are going to be removed. The resulting stream of tokens given by the pair $<M_i, M_t>$ represents one training instance that has been created starting from the method $M$, in which $M_i$ describes the model input sequence while $<M_t>$ being  the corresponding target sequence (\ie the method $M$ without log statements removed). For all those cases in which $k$ is equal to 0, no log statements will be removed and, thus, the input sequence and the target sequence are equal (i.e., the original \java method). 
+Ultimately, we split the fine-tuning dataset into 80\% training, 10\% validation, and 10\% test. In \tabref{tab:} are reported the number of entries in each dataset.  
+
+To build the dataset needed for predicting whether or not log statements are needed in a \java method, we use the same methods featuring the dataset built for the multi-log injection model. Specifically, starting from the original set of 253,501 \java methods having at least one log statement, we apply the same procedure described above with the only difference being the replacement of the target sequence with a binary choice either  \texttt{Need} or \texttt{No need}. Instances labeled as \texttt{No need} correspond to the entries that, in the previous dataset have the input sequence equal to the target sequence (\ie methods that already contain all the necessary log statements, thus need no further logs). On the other hand, the entries labeled as \texttt{Need} are those missing at least one log statement. It is possible that two methods differ only because a they contain a different log statements, if said statements are removed then the methods could be considered equal. Since in these specific datasets all the methods from which log statements have been removed point to the same target sequence (\ie \texttt{Need}), it is possible that duplicates have been created among training, validation, and test sets. Thus, eventually we removed all the between dataset duplicates and we obtained the datasets summarized in \tabref{tab:}
 
 
-\subsubsection{Training and Hyperparameter Tuning} \label{training}
-In this section we detail how the pre-training and the fine-tuning phase have been conducted to support the task of complete log statement generation. Afterwards, we also outline how we found the best-performing model relying on two strategies: (i) hyperparameter tuning  and (ii) early stopping.
 
-The goal of the pre-training phase is to teach the model generalizable knowledge that is useful for the downstream task.
-In our case, during the pre-training, the model gains basic knowledge of the \java language. This is achieved by leveraging a specific pre-training objective, namely, MLM (Masked-Language-Modeling). Said objective consists in teaching the model to predict missing or masked tokens in the input. We processed the methods to obtain an input sequence in which 15\% of random tokens have been masked as depicted in Fig XX.
+\subsubsection{Training and Hyperparameter Tuning} \label{sec:training}
+In this section we outline how the pre-training and the fine-tuning phase have been conducted to support the task of complete log statements generation (\ie injection of log statements). Afterwards, we also outline how we found the best-performing model relying on two strategies: (i) hyperparameter tuning  and (ii) early stopping.
+
+The goal of the pre-training phase is to teach the model generalizable knowledge that is useful for the downstream task. For the task we aim at supporting (\ie complete log statement generation), during the pre-training, the model gains basic knowledge of the \java language by learning the most recurrent patter characterizing \java. This is achieved by leveraging a specific pre-training objective, namely, MLM (Masked-Language-Modeling). Said objective consists in teaching the model to predict missing or masked tokens in the input. We processed the methods to obtain an input sequence in which 15\% of random tokens have been masked as depicted in \figref{fig:pre-training}.
 We pre-train the T5 model for 500k steps on a dataset of 12,332,588 instances using Google Colab's 2x2, 8 cores TPU topology with a batch size of \highlight{YY} and a maximum sequence length of \highlight{ZZZ}. 
 To create the input and target sequences to fine-tine the model, we took each instance of the fine-tuning dataset (\ie train, test and eval) and we removed one log statement. The corresponding target sequence is the complete Java method.
 For those methods containing more than one log statement, we created \emph{n} pairs of input-target sequences, with \emph{n} being the number of log statements in the method.
@@ -109,19 +113,20 @@ Concerning the hyperparameters tuning phase, as discussed by Mastropaolo \etal \
 	\label{tab:learning-rates}
 \end{table}
 
-Since we use software-specific corpora to pre-train and fine-tune the model we needed a new vocabulary that include the \java tokens featuring our datasets. For this reason, we trained a new tokenizer (\emph{i.e.}, a SentencePiece model \cite{kudo2018sentencepiece}) on 1M Java methods and 712,634 English sentences coming from the C4 dataset \cite{raffel2019exploring}. Similarly to what has been done by Mastropaolo \etal \cite{mastropaolo2022using}, we included english sentences to deal with complex log messages and we set the size of the resulting vocabulary to 32k word-pieces.
+Since we use software-specific corpora to pre-train and fine-tune the model we need a new vocabulary that include the \java tokens featuring our datasets. For this reason, we trained a new tokenizer (\emph{i.e.}, a SentencePiece model \cite{kudo2018sentencepiece}) on 1M Java methods and 712,634 English sentences coming from the C4 dataset \cite{raffel2019exploring}. Similarly to what has been done by Mastropaolo \etal \cite{mastropaolo2022using}, we included english sentences to deal with complex log messages and we set the size of the resulting vocabulary to 32k word-pieces.
 
 
 \subsubsection{Generating Predictions}
+Once the T5 model has been pre-trained and fine-tuned to support the task of complete log statements generation, it can generate predictions using different decoding strategies. Relying on the the same generation prediction schema adopted by Mastropaolo \etal \cite{mastropaolo2022using}, we implement the greedy decoding strategy. Such a decoding schema generates the final predictions by selecting at each decoding step the token with the highest probability of appearing in a specific position. In doing so, a single prediction (\ie the one maximizing the likelihood of among all the produced tokens) is generated for the method we give as input to the model.
 
-
-\subsection{IR-based Generation of Log Messages}
-
-
-\subsubsection{Training and Test Dataset}
-
-
-\subsubsection{Training a Machine Learning Model}
-
+%\subsection{IR-based Generation of Log Messages}
+%
+%
+%\subsubsection{Training and Test Dataset}
+%
+%
+%\subsubsection{Training a Machine Learning Model}
 
 \subsection{Combining Deep Learning and IR for Log Statement Generation}
+
+
