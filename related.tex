@@ -5,7 +5,28 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+In this work, we focus our discussion on studies aimed at (i) automating logging activities and (ii) combining deep learning and information retrieval to automate code-related activities. Due to space constraints, we point the reader to the literature review by Watson \etal~\cite{watsonSytematicLiterature2020} regarding the use of deep learning to automate different software engineering tasks.
+
 \subsection{Automating Logging Activities}
 
+Log analysis is a popular practice that support developers in software maintenance tasks such as software testing~\cite{chen2018automated,chen2019experience}, debugging~\cite{satyanarayanan1992transparent}, diagnosis~\cite{zhou2019latent,yuan2012improving}, and monitoring~\cite{hasselbring2020kieker,harty2021logging}. Nonetheless, augmenting source code with correct log statements is a non-trivial manual activity that require developer's experience~\cite{li2020qualitative,yuan2012characterizing}. For this reason, researchers started investigating how to support developers with automatic log injection.
+
+Zhu \etal~\cite{zhu2015learning} conducted a pioneer work to design \textsc{LogAdvisor}. It is a tool to recommend where to inject log statements in the source code. The authors evaluated \textsc{LogAdvisor} on two Microsoft systems and two open-source projects. They reported an accuracy of 60\% when the tool is triggered to inject log statements on pieces of code without log statements.
+
+Yao \etal~\cite{yao2018log4perf} have focused on a similar sub-problem: The proposed approach automatically suggests log statements in code developed to monitor the CPU usage of web-based systems. The results demonstrated a boost in such developers' activities.
+
+Mizouchi \etal \cite{mizouchi2019padla}, moved ahead, and designed \textsc{PADLA}, an extension for the Apache Log4j framework to automatically change log levels of existent log statements. \textsc{PADLA} aims to adjust the log level to optimize the amount of the information logged at runtime and allow a responsive anomaly analysis.
+
+Li \etal~\cite{li2020shall} introduced deep learning to generate logging location recommendations. Their tool reports a 80\% accuracy in suggesting logging locations using within-project training, with slightly worst results (67\%) in a cross-project setting.
+
+Recently, Li \etal \cite{li2021deeplv} proposed also \textsc{DeepLV}. It is a tool based on deep learning to recommend the level of existing log statements in Java methods. \textsc{DeepLV} by aggregating both syntactic and semantic information of the source code showed its superiority with respect to the state-of-the-art tools.
+
+Lastly, Mastropaolo \etal~\cite{mastropaolo2022using} introduced \textsc{LANCE}, a tool to inject log statements enriched with log levels and messages automatically. The proposed tool achieves outstanding performance when solving the first two tasks (65\% and 66\%, respectively, for log position and log levels) while hobbling on the most complex challenge: Generating natural language log messages. Moreover, their tool generates a single log message per method. With our study, we build on top of the above research, and experiment with an augmented model that outperforms \textsc{LANCE} by injecting multiple log statements. 
 
 \subsection{Combining Deep Learning and IR to Automate Code Related Tasks}
+
+Although deep learning showed great potential in solving various software engineering tasks~\cite{watsonSytematicLiterature2020}, it may still struggle with real-world challenges such as generating natural language messages for non-trivial log statements~\cite{mastropaolo2022using}. To overcome such kind of limitations, researchers aimed at leveraging alternative solutions such as combining deep learning and information retrieval to better reuse recorded data..
+
+Yu \etal~\cite{yu2022automated} proposed an innovative approach that combines deep learning and information retrieval techniques. The authors augmented \textsc{ATLAS} to re-use available snippet of source code when the performance of their deep learning model shows a drop. The tool selects an existent code assertion through information retrieval and suggests reusing it. The key concept behind information retrieval is to fetch from a pool of available data the most similar subject. Researchers have leveraged various similarity coefficients in information retrieval such as the Jaccard~\cite{tanimoto1958elementary} similarity. It is a similarity
+coefficient used to estimate the similarity between two sets of data based on their overlapping and unique items.
+
