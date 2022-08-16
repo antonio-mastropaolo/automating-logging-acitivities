@@ -39,7 +39,7 @@ To avoid methods overlapping between training, validation, and test datasets we 
 Finally, we filtered out all the methods containing non-English characters to obtain an even more coherent codebase. 
 To ensure the quality of the processed dataset we performed a manual analysis on a sample of 200 random methods. 
 The purpose of such an analysis was threefold: (i) ensure  the dataset did not contain false-negative logs (\emph{i.e.}, log statements not identified during the creation of the dataset) (ii) ensure the dataset did not contain false-positive logs (\emph{i.e.}, pieces of code wrongly identified as log statements), and (iii), guarantee that all the instances were preprocessed correctly.
-This left us with a dataset of 13,100,955 Java methods of which XXXX contain at least one log statement. We used 12,322,588 non-logged \java methods to build our pre-training dataset and XXXXX logged \java methods have been used to build the fine-tuning dataset as reported in Table \ref{tab:ds-summary-1}. 
+This left us with a dataset of 12,917,300 \java methods of which 244,588 contain at least one log statement. We used the dataset to build the pre-training and fine-tuning datasets summarized in \tabref{tab:ds-summary-1}. 
 
 \begin{table*}[h]
 	\centering
@@ -49,27 +49,28 @@ This left us with a dataset of 13,100,955 Java methods of which XXXX contain at 
 		\hline
 		\multirow{2}{*}{\textit{\textbf{Dataset}}} & \multicolumn{2}{c}{\textbf{train}} & \textbf{} & \textbf{eval} & \textbf{} & \textbf{test}  \\ \cline{2-3} \cline{5-5} \cline{7-7} 
 		& \textbf{w/ log} & \textbf{w/o log} & \textbf{} & \textbf{w/ log} & \textbf{} & \textbf{w/ log} \\ \hline
-		\textit{Pre-training dataset}              & -               &      12,332,588  &           & -               &           &  -               \\
-		\textit{Single-log fine-tuning dataset}               & 253,501         & -                &           & 31,721          &           & 31,651          \\
-		\textit{Multi-log fine-tuning dataset}               & 253,501         & -                &           & 31,721          &           & 31,651          \\ 
-		\textit{Need-4-log fine-tuning dataset}               & 253,501         & -                &           & 31,721          &           & 31,651          \\ \hline
+		\textit{Pre-training dataset}              & -               &      12,671,475  &           & -               &           &  -               \\
+		\textit{Single-log fine-tuning dataset}               & 229,703         & -                &           & 28,763          &           & 28,698          \\
+		\textit{Multi-log fine-tuning dataset}               & 192,773         & -                &           & 24,092         &           & 24,088          \\ \hline
+		\textit{Single-log Context-Aware fine-tuning dataset}               & 229,703         & -                &           & 28,763          &           & 28,698          \\
+		\textit{Multi-log Context-Aware fine-tuning dataset}               & 192,773         & -                &           & 24,092         &           & 24,088          \\ \hline
 	\end{tabular}
 \end{table*}
 
 
 
 \begin{figure}[h!]
-	\caption{Example of pre-training instance.}
-	\label{pre-training}
+	\label{fig:pre-training}
 	\includegraphics[width=\columnwidth]{img/pre-training.pdf}
+		\caption{Example of T5 Pre-training instance.}
 \end{figure}
 
 
 
 
-\subsubsection{Single-Log fine-tuning dataset}
-To build the fine-tuning dataset that replicate what have been done by Mastropaolo \etal \cite{mastropaolo2022using}, we pre-process each training instance (\ie \java method in the training-set) by removing one log statement at a time from the \java method. This process, leaves us with a pair $<M_i, M_t>$ featured by the input and the target sequence in which $M_i$ represents the original \java method $M$ without the target log statement, while $M_t$ is the original \emph{Java} method equivalent to $M$. For those methods containing more than one log statement, we created $n$ pairs of input-target sequences, with $n$ being the number of log statements in the method. To ensure that after the log statement removal all the instances are still valid Java methods, we parsed each instance we created using JavaParser \cite{} and removed all the instances the tool was not able to parse or instances that after the instrumentation have been duplicated. Finally, the fine-tuning dataset replicating the approach implemented by Mastropaolo \etal \cite{mastropaolo2022using}, has been split into 80\% training, 10\% validation, and 10\% test (see \tabref{tab:df-summary-1}). 
-While the instances featuring the test set have been used to assess the performance of our model (\emph{i.e.}, its ability to generate complete log statements and inject them in the correct location), the validation set was used to find the best configuration of hyperparameters \secref{sec:training}. Later, we used the validation dataset also to perform early-stopping (Section \ref{t5-finetuning}) taming the over-fitting problem.
+\subsubsection{Single-Log fine-tuning dataset} \label{sec:single-log-dataset}
+To build the fine-tuning dataset that replicate what have been done by Mastropaolo \etal \cite{mastropaolo2022using}, we pre-process each training instance (\ie \java method in the training-set) by removing one log statement at a time from the \java method. This process, leaves us with a pair $\langle M_i, M_t \rangle$ featured by the input and the target sequence in which $M_i$ represents the original \java method $M$ without the target log statement, while $M_t$ is the original \emph{Java} method equivalent to $M$. For those methods containing more than one log statement, we created $n$ pairs of input-target sequences, with $n$ being the number of log statements in the method. To ensure that after the log statement removal all the instances are still valid Java methods, we parsed each instance we created using JavaParser \cite{javaparser} and removed all the instances the tool was not able to parse or instances that after the instrumentation have been duplicated. Finally, the fine-tuning dataset replicating the approach implemented by Mastropaolo \etal \cite{mastropaolo2022using}, has been split into 80\% training, 10\% validation, and 10\% test (see \tabref{tab:ds-summary-1}). 
+While the instances featuring the test set have been used to assess the performance of our model (\emph{i.e.}, its ability to generate complete log statements and inject them in the correct location), the validation set was used to find the best configuration of hyperparameters (\secref{sec:training}). Later, we used the validation dataset also to perform early-stopping taming the over-fitting problem.
 
 We use such a dataset to replicate LANCE on a more extensive and curated set of instances.
 Nonetheless, even when considering that LANCE represents a concrete step ahead in automating logging activities, the limiting factor affecting the generation of meaningful log messages would pose questions about the usefulness of such an approach.  
@@ -90,10 +91,12 @@ As introduced in \secref{sec:intro}, the main idea is to augment the input of a 
 	J(M_{eval_i}^{1}, M_{tr_j}^{1})=\frac{|M_{eval_i}^{1} \cap M_{tr_j}^{1} |}{| M_{eval_i}^{1} \cup M_{tr_j}^{1} |}
 \end{equation}
 
-To compute such a metric, for each pair $\langle M_{Z_i}^{1}, M_{tr_j}^{1} \rangle$ with $Z \in \{ training, eval, test\}$ we set the \java tokens featuring the methods, ending up with an unique list of \java tokens (\ie each token appears only once in such list) for both methods.
+To compute such a metric, for each pair $\langle M_{Z_i}^{1}, M_{tr_j}^{1} \rangle$ with $Z \in \{ training, eval, test\}$ we create a set of the \java tokens featuring of the methods, ending up with an unique list of \java tokens (\ie each token appears only once in such list) for both methods.
 Finally, we use the \textit{Jaccard Similarity} score to rank the most similar $K=\{1,3,5\}$ methods to $M_{Z_i}^{1}$, from which we retrieve all the log messages accompanying the log statements in the $K$ retrieved methods.
 
 From the moment that among the $K$ most similar methods, we might find log statements having the same log message, we disentangle such a case by adding to each retrieved log message the \textit{Jaccard Similarity} score of the log message that has been retrieved from the method $M_{tr_j}^{1}$ sharing the highest number of tokens with $M_{Z_i}^{1}$.
+
+As for those instances where the log statements (by construction) do not include log messages, the augmentation process returns as output the original input sequence (\ie \java method with a stripped log statement) taken as input.
 
 
 \figref{} shows an example of augmented Java method from log message context-aware dataset.
@@ -103,29 +106,47 @@ From the moment that among the $K$ most similar methods, we might find log state
 
 \subsubsection{Multi-Log fine-tuning dataset}
 
-We build the multi-log fine-tuning dataset by applying the following procedure: for each method featuring the 253,501 instances having logs, we chose an arbitrary number $k$ from 0 to $n$, where $n$ is the number of log statements in the method. Then, we randomly select $k$ log statements out of the method’s $n$ logs that are going to be removed. The resulting stream of tokens given by the pair $<M_i, M_t>$ represents one training instance that has been created starting from the method $M$, in which $M_i$ describes the model input sequence while $<M_t>$ being  the corresponding target sequence (\ie the method $M$ without log statements removed). For all those cases in which $k$ is equal to 0, no log statements will be removed and, thus, the input sequence and the target sequence are equal (i.e., the original \java method). 
-Ultimately, we split the fine-tuning dataset into 80\% training, 10\% validation, and 10\% test. In \tabref{tab:} are reported the number of entries in each dataset.  
+We build the multi-log fine-tuning dataset by applying the following procedure: for each method featuring the 244,588 instances having logs, we chose an arbitrary number $k$ from 1 to $n$, where $n$ is the number of log statements in the method. Then, we randomly select $k$ log statements out of the method's $n$ logs that are going to be removed. 
+The resulting stream of tokens given by the pair $\langle M_i, M_t \rangle$ represents one training instance that has been created starting from the method $M$, in which $M_i$ describes the model input sequence while $\langle M_t \rangle$ being  the corresponding target sequence (\ie the method $M$ without log statements removed). 
+We parsed each processed method using JavaParser \cite{javaparser} to ensure that all the instances were still valid Java code after removing the $k$ log statements. 
+All the input sequences throwing a parsing exception have been removed from the datasets. Finally, we split the dataset into 80\% training, 10\% validation, and 10\% test (see the third row of \tabref{tab:ds-summary-1}).
+
+Once we obtained the dataset (\ie training, validation and test) for the multi-log injection task, we augment those instances with the augmentation process detailed in \secref{sec:single-log-dataset}.
 
 \subsubsection{Deciding whether log statements are needed}
 
-To build the dataset needed for predicting whether or not log statements are needed in a \java method, we use the same methods featuring the dataset built for the multi-log injection model. Specifically, starting from the original set of 253,501 \java methods having at least one log statement, we apply the same procedure described above with the only difference being the replacement of the target sequence with a binary choice either  \texttt{Need} or \texttt{No need}. Instances labeled as \texttt{No need} correspond to the entries that, in the previous dataset have the input sequence equal to the target sequence (\ie methods that already contain all the necessary log statements, thus need no further logs). On the other hand, the entries labeled as \texttt{Need} are those missing at least one log statement. It is possible that two methods differ only because a they contain a different log statements, if said statements are removed then the methods could be considered equal. Since in these specific datasets all the methods from which log statements have been removed point to the same target sequence (\ie \texttt{Need}), it is possible that duplicates have been created among training, validation, and test sets. Thus, we removed all the duplicates obtaining the final datasets summarized in \tabref{tab:}
+To build the dataset needed for predicting whether or not log statements are needed in a \java method, we use the same set of instances featuring the dataset built for the multi-log injection model. To this extent, we start from the original set of 244,588 \java methods having at least one log statement, then for each method, we chose an arbitrary number $k$ from 0 to $n$, where $n$ is the number of log statements in the method. Then, we randomly selected $k$ log statements out of the
+method's $n$ logs. When $k$ is equal to 0 it means that no log statements have been removed and, thus, the input sequence and the target sequence are equal (\ie, the original \java method). After the log statements removal, we ensured that the input sequences still represented a valid \java code by using JavaParser \cite{javaparser} to parse the methods. All those instances throwing parsing exceptions have been removed from the datasets. 
+Finally, for each instance, we replaced the target sequence with a binary choice either \texttt{Need} or \texttt{No need}. Instances labeled as \texttt{No need} correspond to the entries for which no log statements have been removed (\ie $k=0$) thus, need no further logs. On the other hand, the entries labeled as \texttt{Need} are those missing at least one log statement. It is possible that two methods differ only because they contain a different log statements, if said statements are removed then the methods could be considered equal. Thus, input sequences pointing to the same target sequences (\ie \texttt{Need}), have been removed to avoid duplicated entries in the dataset obtaining a training and a validation set including 190,974 instances and 23,725, respectively.
+
+As for the test set, since it is not possible to ensure it represents the real distribution of Java methods that either need or do not need log statements, we decided to test the model's performance on three different test sets. Each test set contains a different distribution in terms of Java methods that need the injection of further logs or not. The three distributions are 50-50 (50\%) of the instances require at least one additional log statement, the other 50\% do not), 75-25 (75\% of the methods want at least one additional log statement while the remaining 25\% do not), and 25-75 (25\% of the instances need the injection of at least one log statements, while the other 75\% need none).
+\tabref{tab:ds-summary-2} reports the number of instances contained in the above-mentioned datasets.
+
+\begin{table*}[h!]
+	\centering
+	\caption{Num. of methods in the datasets used to predict the need for logs}
+	\begin{tabular}{rcccccccc}
+		\hline
+		\multirow{2}{*}{\textit{\textbf{Dataset}}} & \multicolumn{2}{c}{\textbf{train}} & \textbf{} & \multicolumn{2}{c}{\textbf{eval}}  & \textbf{} & \multicolumn{2}{c}{\textbf{test}}  \\ \cline{2-3} \cline{5-6} \cline{8-9} 
+		& \textbf{Need} & \textbf{No need}   & \textbf{} & \textbf{Need} & \textbf{No need}   & \textbf{} & \textbf{Need} & \textbf{No need}   \\ \hline
+		\textit{Need4Log fine-tuning dataset (50-50)}         & 98,848        & 92,126             &           & 12,257        & 11,468             &           & 11,627        &  11,627            \\
+		\textit{Need4Log fine-tuning dataset (75-25)}         & 98,848        & 92,126             &           & 12,257        & 11,468             &           & 12,159        &  4,053             \\
+		\textit{Need4Log fine-tuning dataset (25-75)}         & 98,848        & 92,126             &           & 12,257        & 11,468             &           & 3,875         &  11,627            \\ \hline
+	\end{tabular}
+	\label{tab:ds-summary-2}
+\end{table*}
+
+\section{Training and Hyperparameter Tuning} \label{sec:training}
+In this section we outline how the pre-training and the fine-tuning phase have been conducted to support the task of complete log statements generation (\ie injection of log statements) first and, the prediction of the need for log statements within \java methods. Afterwards, we also outline how we found the best-performing models when training both models, exploiting two main strategies: (i) hyperparameter tuning  and (ii) early stopping.
+
+The goal of the pre-training phase is to teach the model generalizable knowledge that is useful for the downstream task. For the task we aim at supporting (\ie complete log statement generation), during the pre-training, the model gains basic knowledge of the \java language by learning the most recurrent patter of such a language (\ie \java). This is achieved by leveraging a specific pre-training objective, namely, MLM (Masked-Language-Modeling). Said objective consists in teaching the model to predict missing or masked tokens in the input. We processed the methods to obtain an input sequence in which 15\% of random tokens have been masked as depicted in \figref{fig:pre-training}.
+We pre-train the T5 model for 500k steps on a dataset of 12,671,475 instances using Google Colab's 2x2, 8 cores TPU topology with a batch size of 128 and a maximum sequence length of 512.
 
 
 
-\subsubsection{Training and Hyperparameter Tuning} \label{sec:training}
-In this section we outline how the pre-training and the fine-tuning phase have been conducted to support the task of complete log statements generation (\ie injection of log statements). Afterwards, we also outline how we found the best-performing model relying on two strategies: (i) hyperparameter tuning  and (ii) early stopping.
 
-The goal of the pre-training phase is to teach the model generalizable knowledge that is useful for the downstream task. For the task we aim at supporting (\ie complete log statement generation), during the pre-training, the model gains basic knowledge of the \java language by learning the most recurrent patter characterizing \java. This is achieved by leveraging a specific pre-training objective, namely, MLM (Masked-Language-Modeling). Said objective consists in teaching the model to predict missing or masked tokens in the input. We processed the methods to obtain an input sequence in which 15\% of random tokens have been masked as depicted in \figref{fig:pre-training}.
-We pre-train the T5 model for 500k steps on a dataset of 12,332,588 instances using Google Colab's 2x2, 8 cores TPU topology with a batch size of \highlight{YY} and a maximum sequence length of \highlight{ZZZ}. 
-To create the input and target sequences to fine-tine the model, we took each instance of the fine-tuning dataset (\ie train, test and eval) and we removed one log statement. The corresponding target sequence is the complete Java method.
-For those methods containing more than one log statement, we created \emph{n} pairs of input-target sequences, with \emph{n} being the number of log statements in the method.
-For each one of the \emph{n} pairs, we removed a different log statement, since the target sequences of those pairs is the same we made sure that there were no duplicates between training, validation, and test datasets. 
-To ensure that after the log statement removal all the instances are still valid Java methods, we parsed each instance of the three subsets (\emph{i.e.}, train, eval, and test) using JavaParser \cite{javaparser} and removed all the instances the tool was not able to parse.
-In Table \ref{tab:ds-summary-1} are reported the actual number of methods in each dataset
-
-
-
-Concerning the hyperparameters tuning phase, as discussed by Mastropaolo \etal \cite{mastropaolo2021studying}, we did not tune the T5 model hyperparameters during the pre-training phase, because such a phase is task-agnostic, and therefore it would provide limited benefits. Instead, we rely on the same strategy adopted by the same authors in \cite{mastropaolo2022using} when fine-tuning the hyperparameters of the model. Specifically, we experiment with four different learning rate scheduler: (i) \textit{Constant Learning Rate} (C-LR): the learning rate is fixed during the whole training (we use $LR = 0.001$, \ie the value used in the original paper \cite{raffel2019exploring}); (ii) \textit{Inverse Square Root Learning Rate} (ISR-LR): the learning rate decays as the inverse square root of the training step (the same used for pre-training by Raffel \etal); (iii) \textit{Slanted Triangular Learning Rate \cite{howard2018universal}} (ST-LR): the learning rate first linearly increases and then linearly decays to the starting learning rate;  (iv) \textit{Polynomial Decay Learning Rate} (PD-LR): the learning rate decays polynomially from an initial value to an ending value in the given decay steps. Table \ref{tab:learning-rates} reports all the parameters used for each scheduling strategy as did in \cite{mastropaolo2022using}.
+Concerning the hyperparameters tuning phase, as discussed by Mastropaolo \etal \cite{mastropaolo2021studying}, we did not tune the T5 model hyperparameters during the pre-training phase, because such a phase is task-agnostic, and therefore it would provide limited benefits. Instead, we rely on the same strategy adopted by the Mastropaolo \etal \cite{mastropaolo2022using} when fine-tuning the hyperparameters of LANCE. Specifically, we experiment with four different learning rate scheduler: (i) \textit{Constant Learning Rate} (C-LR): the learning rate is fixed during the whole training (we use $LR = 0.001$, \ie the value used in the original paper \cite{raffel2019exploring}); (ii) \textit{Inverse Square Root Learning Rate} (ISR-LR): the learning rate decays as the inverse square root of the training step (the same used for pre-training by Raffel \etal); (iii) \textit{Slanted Triangular Learning Rate \cite{howard2018universal}} (ST-LR): the learning rate first linearly increases and then linearly decays to the starting learning rate;  (iv) \textit{Polynomial Decay Learning Rate} (PD-LR): the learning rate decays polynomially from an initial value to an ending value in the given decay steps.
+Table \ref{tab:learning-rates} reports all the parameters used for each scheduling strategy as evaluated in \cite{mastropaolo2022using}.
 
 \begin{table}[h]
 	\centering
@@ -140,7 +161,7 @@ Concerning the hyperparameters tuning phase, as discussed by Mastropaolo \etal \
 		& \textit{Ratio = 32}               \\
 		& \textit{Cut = 0.1}                \\
 		Polynomial Decay            & \textit{LR\textsubscript{starting} = 0.01}  \\
-		& \textit{LR\textsubscript{end} = 1e-06}      \\
+		& \textit{LR\textsubscript{end} = 0.001}      \\
 		& \textit{Power = 0.5}              \\ \hline
 	\end{tabular}
 	\vspace{0.2cm}
