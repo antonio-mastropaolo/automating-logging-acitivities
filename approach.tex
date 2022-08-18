@@ -113,7 +113,7 @@ All the input sequences throwing a parsing exception have been removed from the 
 
 Once we obtained the dataset (\ie training, validation and test) for the multi-log injection task, we augment those instances with the augmentation process detailed in \secref{sec:single-log-dataset}.
 
-\subsubsection{Deciding whether log statements are needed}
+\subsubsection{Deciding whether log statements are needed} \label{sec:predicting-dataset}
 
 To build the dataset needed for predicting whether or not log statements are needed in a \java method, we use the same set of instances featuring the dataset built for the multi-log injection model. To this extent, we start from the original set of 244,588 \java methods having at least one log statement, then for each method, we chose an arbitrary number $k$ from 0 to $n$, where $n$ is the number of log statements in the method. Then, we randomly selected $k$ log statements out of the
 method's $n$ logs. When $k$ is equal to 0 it means that no log statements have been removed and, thus, the input sequence and the target sequence are equal (\ie, the original \java method). After the log statements removal, we ensured that the input sequences still represented a valid \java code by using JavaParser \cite{javaparser} to parse the methods. All those instances throwing parsing exceptions have been removed from the datasets. 
@@ -204,15 +204,18 @@ In contrast, to find the best-performing model when fine-tuning T5 on the \texti
 
 From the achieved results reported in \tabref{tab:hp-results}, it emerges a slight gain in terms of correct predictions when using the ISR-LR scheduler across the different values of $K$. Thus, we use such a scheduler to fine-tune the models on the	\textit{Single-Log Context-Aware fine-tuning dataset}. In detail, when $K=1$, we fine-tune the T5 model for 120k steps, after which we did not find improvements in going further, resulting in the activation of the early stopping strategy. When the number of methods from which we retrieve the log messages increases (\ie $K=3$ and $K=5$), the model reaches convergence after 120k steps for $K=3$, and after 190k steps for $K=5$.
 
-\subsubsection{Multi Log Statements Injection}
+\subsubsection{Multi Log Statements Injection} \label{sec:multi-injection-model}
 
 Concerning the multi-log injection task, we perform hyperparameters tuning for both configurations (\ie augmented data and not). This resulted in the fine-tuning of 20 T5 models achieving the results reported in \tabref{tab:hp-results} (see rows from 4 to 7). In particular, from the performances, we report in \tabref{tab:hp-results} become evident a clear trend in which the ISQ-LR scheduler outperforms all the other strategies in the set of experiments we carried out. To this extent, each model has been trained using the ISQ-LR scheduler using an early stropping strategy that stops the training if no improvements in terms of correct predictions are found after 5 evaluating the model for 5 consecutive checkpoints (a new checkpoint is saved after 10k steps of fine-tuning).
 The best-performing model generating log statements using the non-augmented inputs converges after \textcolor{red}{200k} steps.
-On the other hand, the models that have been fine-tuned using the augmented data (\ie log messages and the Jaccard similarities of the methods), reach convergence after 270k steps for $K=1$. In contrast, when the number of methods from which we retrieve the log messages increase (\ie $K=1$ and $k=5$), both models reach convergence after 230k steps.
+On the other hand, the models that have been fine-tuned using the augmented data (\ie log messages and the Jaccard similarities of the methods), reach convergence after 270k steps for $K=1$. In contrast, when the number of methods from which we retrieve the log messages increase (\ie $K=3$ and $k=5$), both models reach convergence after 230k steps.
 
 \subsubsection{Predicting The Need for Log Statements}
-As for predicting the need for log statements, we first found the best configurations of hyperparameters. Later we used the discussed early stopping strategy, evaluating the model every 10k steps and stopping if there are no gains in terms of accuracy after 5 consecutive rounds of evaluation.
-We conducted the search of the learning strategy maximizing the accuracy, fine-tuning four different models (for 100k steps), each one of which features one of the scheduler reported in \tabref{tab:learning-rates} . From the achieved results reported in \tabref{tab:need4log-hp}, the scheduler that achieves the best results is the PD-LR. Therefore, we selected such a learning strategy to fine-tune the classifier model for 30k steps, after which the early stopping strategy found the best checkpoint.
+As for predicting the need for log statements, we decided to investigate the extent to which the T5 model we pre-trained for supporting the task of complete log statements generation, can further be fine-tuned on the dataset we introduced in \secref{sec:predicting-dataset} predicting whether log statements are needed or not.
+Therefore to study the feasibility of a large pre-trained language model of code (\ie T5) in supporting such a task, we first found the best configurations of hyperparameters. Later, to tame overfitting we adopt the discussed early stopping strategy, evaluating the model on the validation set every 10k steps and stopping if there are no gains in terms of accuracy after 5 consecutive rounds of evaluation.
+We conducted the search of the learning strategy maximizing the accuracy, fine-tuning four different models (for 100k steps), each one of which features one of the scheduler reported in \tabref{tab:learning-rates} . From the achieved results reported in \tabref{tab:need4log-hp}, the scheduler that achieves the best results is the PD-LR. Thus, we selected such a learning strategy to fine-tune the classifier model for 30k steps, after which the early stopping strategy returns the best checkpoint.
+
+Once the best-performing T5 based classifier has been fine-tuned, it can be queued by a model able to inject log statements into \java methods (\secref{sec:multi-injection-model}).
 
   \begin{table}[h!]
 	\centering
