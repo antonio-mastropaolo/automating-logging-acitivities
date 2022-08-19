@@ -53,11 +53,20 @@ Finally, to avoid any possible overlap between the training, evaluation, and tes
 \label{sub:pretraining}
 Since the goal of pre-training is to provide T5 with general knowledge about the language of interest (\ie Java), we used for pre-training all methods not featuring a log statement (the latter will be used for the fine-tuning datasets). For the pre-training we adopted a classic \emph{masked language model} task, which consists in randomly masking 15\% of the tokens composing a training instance (\ie a Java method in our case) asking the model to predict them. \figref{fig:pre-training} depicts a pre-training instance from our dataset.
 
+
+\begin{figure}[h!]
+	\label{fig:ir-example}
+	\includegraphics[width=\columnwidth]{img/ir-example.pdf}
+	\caption{Example of augmented input featured by log messages retrieved from the ($k=3$) most similar coding context.}
+\end{figure}
+
 \begin{figure}[h!]
 	\label{fig:pre-training}
 	\includegraphics[width=\columnwidth]{img/pre-training.pdf}
 		\caption{Example of Pre-training instance}
 \end{figure}
+
+
 
 \subsubsection{Fine-tuning Dataset: Single Log Generation} \label{sec:single-log-dataset}
 We build a fine-tuning aimed at replicating what has been done in the training of LANCE by Mastropaolo \etal \cite{mastropaolo2022using}. We process each method $M$ having $n \geq 1$ log statements by removing from it one log statement (\ie leaving it with $n-1$ log statements). This allows to create a training pair $\langle M_s, M_t \rangle$ with $M_s$ representing the input provided to the model (\ie $M$ with one removed log statement) and  $M_t$ being the expected output (\ie $M$ in its original form, with all its log statements). This is the dataset used to train LANCE \cite{mastropaolo2022using} and it allows to train a model able, given a Java method as input, to inject in it one new log statement. 
@@ -70,7 +79,10 @@ We split the remaining pairs into training (80\%), validation (10\%) and test (1
 
 In \approach, we want to combine DL and IR with the goal of boosting performance especially when it comes to the generation of meaningful log messages, being one of the weaknesses of LANCE. The main idea is to augment the input provided to the model (\ie $M_{s}$) with log messages belonging methods similar to $M_{s}$ which are featured in the fine-tuning training set. For each of the 244,588 $\langle M_s, M_t \rangle$ pairs in the fine-tuning dataset described in \secref{sec:single-log-dataset} (this includes training, validation, and test), we identify the $k$ most similar pairs in the training set. The similarity between two pairs is based on the similarity of their $M_s$ (\ie the method in which the log statement must be created) and it is computed using the Jaccard similarity \cite{hancock2004jaccard} index, based on the percentage of code tokens shared across the two methods. We then use these $k$ similar methods to extract from them example of log messages used in coding contexts which are similar to the $M_s$ at hand. Two clarifications are important here. First, independently if a given pair is in the training, validation, or test set, we extract its $k$ most similar pairs only from the training set. This is needed since, while predicting the log statement to inject, the training set must be the only knowledge available to the model (\ie the test set must be composed of previously unseen instances). Second, when computing the Jaccard similarity, we remove from the compared methods all log statements, since we want to identify similar ``coding contexts'' that may require similar log statements. We created three different fine-tuning datasets using different values of $k=\{1,3,5\}$ (thus, a higher/lower number of exemplar log messages provided as input to the model).
 
-\figref{} shows an example of training instance for this fine-tuning dataset. The method on top represents the $M_{s}$ \java method in which a log statement must be injected (\ie the one highlighted in red). The method is enriched with the exemplar log messages that have been found in the $k=1$ most similar method shown in the bottom. Besides the log messages, we also provide T5 with the Jaccard similarity between the $M_{s}$ at hand (top of the figure in this case) and the method of the training set from which each log message has been extracted. This is just meant to represent an additional hint for T5 in terms of which exemplar message comes from the most similar coding context.
+
+
+
+\figref{fig:ir-example} shows an example of training instance for this fine-tuning dataset. The method on top represents the $M_{s}$ \java method in which a log statement must be injected (\ie the one highlighted in red). The method is enriched with the exemplar log messages that have been found in the $k=3$ most similar methods shown in the bottom. Besides the log messages, we also provide T5 with the Jaccard similarity between the $M_{s}$ at hand (top of the figure in this case) and the method of the training set from which each log message has been extracted. This is just meant to represent an additional hint for T5 in terms of which exemplar message comes from the most similar coding context.
 
 Note that the instances in this dataset are exactly the same of the one previously described to replicate LANCE (see \tabref{tab:ds-summary-1}). This allows a direct comparison in terms of performance which will provide information about the gain, if any, provided by the integration of the IR technique in the loop.
 
