@@ -178,7 +178,7 @@ Each model has been run for 100k training steps on the fine-tuning dataset. Then
 
 
 
-\subsection{Fine-tuning the Model}
+\subsection{Fine-tuning}
 Once identified the best learning rates to use, we fine-tuned the final models using early stopping, with checkpoints saved every 10k steps, a delta of 0.01, and a patience of 5. This means training the model on the fine-tuning dataset and evaluating its performance (again in terms of correct predictions) on the evaluation set every 10k. The training process stops if a gain lower than delta (0.01) is observed at each  50k steps interval. This means that after 60k steps, the performance of the model is compared against that of the 10k checkpoint and, if the gain in performance is lower than 0.01, the training stops and the best-performing checkpoint up to that training step is selected. This process has been used for all models, including the one replicating LANCE. Our replication package \cite{replication} reports the convergence of all models (\ie the number of steps after which the early stopping criterion was met). 
 
 
