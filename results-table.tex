@@ -1,49 +1,20 @@
-\documentclass{article}
-
-% Language setting
-% Replace `english' with e.g. `spanish' to change the document language
-\usepackage[english]{babel}
-
-% Set page size and margins
-% Replace `letterpaper' with `a4paper' for UK/EU standard size
-\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
-
-% Useful packages
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage[colorlinks=true, allcolors=blue]{hyperref}
-\usepackage{pifont}
-\usepackage{multicol}
-\usepackage{multirow}
-
-\begin{document}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% NB: This table requires the following packages
-%
-% \usepackage{pifont}
-% \usepackage{multicol}
-% \usepackage{multirow}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 \begin{table}[h!]
   \centering
-  \caption{ Caption here ...}
-  \begin{tabular}{cccccrrrr}
-  \hline
-  \multicolumn{4}{c}{Log}                        &  & \multicolumn{4}{c}{Predictions}                           \\ \cline{1-4} \cline{6-9} 
-  Variable   & Level     & Message   & Position  &  & \multicolumn{1}{c}{LEONID} & \multicolumn{1}{c}{LENCE} & \multicolumn{1}{c}{P-VAL} & \multicolumn{1}{c}{OR}     \\ \hline
-  \ding{51}  & \ding{51} & \ding{51} & \ding{51} &  & 27.26\%                    & 26.78\%                   &                           &                            \\
-  \ding{51}  & -         & -         & -         &  & 76.45\%                    & 77.15\%                   &                           &                            \\ 
-  -          & \ding{51} & -         & -         &  & 73.53\%                    & 74.18\%                   &                           &                            \\
-  -          & -         & \ding{51} & -         &  & 31.55\%                    & 30.16\%                   &                           &                            \\ 
-  -          & -         & -         & \ding{51} &  & 82.35\%                    & 82.28\%                   &                           &                            \\ \hline
-  \ding{51}  & \ding{51} & \ding{55} & \ding{51} &  & 28.14\%                    & 29.86\%                    &                           &                            \\ \hline 
-  
-  \end{tabular}
+  \caption{Correct predictions considering the four-dimensional challenges of injecting log statements.}
+  \resizebox{.5\textwidth}{!}{
+	  \begin{tabular}{cccccrrrr}
+	  \hline
+	  Variable   & Level     & Message   & Position  &  & \multicolumn{1}{c}{LEONID} & \multicolumn{1}{c}{LANCE} & \multicolumn{1}{c}{$p$-value} & \multicolumn{1}{c}{OR}     \\ \hline
+	  \ding{51}  & \ding{51} & \ding{51} & \ding{51} &  & 27.26\%                    & 26.78\%                   &                           &                            \\
+	  \ding{51}  & -         & -         & -         &  & 76.45\%                    & 77.15\%                   &                           &                            \\ 
+	  -          & \ding{51} & -         & -         &  & 73.53\%                    & 74.18\%                   &                           &                            \\
+	  -          & -         & \ding{51} & -         &  & 31.55\%                    & 30.16\%                   &                           &                            \\ 
+	  -          & -         & -         & \ding{51} &  & 82.35\%                    & 82.28\%                   &                           &                            \\ \hline
+	  \ding{51}  & \ding{51} & \ding{55} & \ding{51} &  & 28.14\%                    & 29.86\%                    &                           &                            \\ \hline 
+	  
+	  \end{tabular}
+  }
   \label{tab:single-train-results}
 \end{table}
 
 
-\end{document}
