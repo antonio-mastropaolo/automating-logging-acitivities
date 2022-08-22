@@ -17,12 +17,18 @@
 	\begin{tabular}{lrrrrrr}
 		\toprule
 		& {\bf LANCE} & {\bf LEONID ($k=1$)} &  {\bf LEONID ($k=3$)} &  {\bf LEONID ($k=5$)} \\\midrule
-		BLEU-4 \cite{papineni2002bleu}& 39.96 & 42.20  & \bf 42.37 & \bf 42.37\\
+		BLEU-A \cite{papineni2002bleu}& 39.96 & 42.20  & \bf 42.37 & \bf 42.37\\
+			\hspace{0.2cm} BLEU-1 & 31.50 & \bf 34.11 & 33.75  & 33.93\\
+			\hspace{0.2cm} BLEU-2 & 33.54 & \bf35.88 & 35.56 & 35.80\\
+			\hspace{0.2cm} BLEU-3 & 30.96 & \bf 33.53 & 33.22 & 33.43\\
+			\hspace{0.2cm} BLEU-4 & 30.96 & \bf 33.53 & 33.22 & 33.43\\
+		METEOR \cite{meteor} & 44.87 & 46.85  & \bf 47.18 & 47.04 \\
 		ROUGE-LCS \cite{lin2004rouge} &  &  & & \\
 		\hspace{0.2cm} $precision$ & 31.50 & \bf 34.11 & 33.75  & 33.93\\
 		\hspace{0.2cm} $recall$ & 33.54 & \bf35.88 & 35.56 & 35.80\\
 		\hspace{0.2cm} $fmeasure$ & 30.96 & \bf 33.53 & 33.22 & 33.43\\
-		METEOR \cite{meteor} & 44.87 & 46.85  & \bf 47.18 & 47.04 \\\bottomrule
+		METEOR \cite{meteor} & 44.87 & 46.85  & \bf 47.18 & 47.04 \\
+		LEVENSHTEIN \cite{levenshtein1966} & 44.87 & 46.85  & \bf 47.18 & 47.04 \\\bottomrule
 	\end{tabular} 
 	\vspace{-0.2cm}
 }
@@ -39,15 +45,16 @@
 		\midrule
 		\multirow{3}{*}{LANCE  \emph{vs} LEONID ($k=1$)} & BLEU-4 & $<$0.001 & 0.64 (L) \\ 
 		& ROUGE-LCS (f-measure) & $<$0.001 & 0.55 (L) \\ 
-		& METEOR & $<$0.001 & 0.61 (L) \\\midrule
+		& METEOR & $<$0.001 & 0.61 (L) \\
+			& LEVENSHTEIN & $<$0.001 & 0.61 (L) \\\midrule
 		\multirow{3}{*}{LANCE  \emph{vs} LEONID ($k=3$)} & BLEU-4 & $<$0.001 & 0.64 (L) \\ 
 		& ROUGE-LCS (f-measure) & $<$0.001 & 0.54 (L) \\ 
 		& METEOR & $<$0.001 & 0.61 (L) \\
-		\bottomrule
+			& LEVENSHTEIN & $<$0.001 & 0.61 (L) \\\midrule
 			\multirow{3}{*}{LANCE  \emph{vs} LEONID ($k=5$)} & BLEU-4 & $<$0.001 & 0.64 (L) \\ 
 		& ROUGE-LCS (f-measure) & $<$0.001 & 0.54 (L) \\ 
 		& METEOR & $<$0.001 & 0.61 (L) \\
-		\bottomrule
+			& LEVENSHTEIN & $<$0.001 & 0.61 (L) \\\midrule
 	\end{tabular}
 	\vspace{-0.2cm}
 \end{table}

@@ -31,7 +31,7 @@ We then used srcML \cite{srcml} to perform a lightweight parsing of the selected
 We run \emph{javalang} \cite{javalang} on the remaining methods to tokenize them and excluded all those having $\#tokens < 10$ or $\#tokens \geq 512$. The upper-bound filtering has been done in previous works \cite{ADD_CITATIONS_FROM_OTHER_GROUPS,mastropaolo2021empirical,tufano2021automating,ciniselli2021empirical} to limit the computational expenses of training DL-based models. The lower-bound of 10 tokens aims at removing empty methods. We also filtered out all the methods containing non-ASCII characters in an attempt to exclude at least some of the methods featuring log messages not written in English. 
 
 
-Finally, to avoid any possible overlap between the training, evaluation, and test datasets we are going to create from the collected set of methods, we removed all exact duplicates, obtaining the final set of 12,917,300 \java methods, of which 244,588 contain at least one log statement. 
+Finally, to avoid any possible overlap between the training, evaluation, and test datasets we are going to create from the collected set of methods, we removed all exact duplicates, obtaining the final set of 12,916,063 \java methods, of which 244,588 contain at least one log statement. 
 
 \begin{table*}[h]
 	\centering
@@ -73,7 +73,7 @@ We build a fine-tuning aimed at replicating what has been done in the training o
 
 For methods having $n > 1$ (\ie more than one log statement), we created $n$ pairs $\langle M_s, M_t \rangle$, each of them having one of the $n$ log statements removed (\ie different $M_s$). To ensure that after the log statement removal our instances still featured valid Java methods, we parsed each $M_s$ using JavaParser \cite{javaparser} and removed all pairs including an invalid $M_s$. 
 
-We split the remaining pairs into training (80\%), validation (10\%) and test (10\%) set as reported in \tabref{tab:ds-summary-1}. Training and testing a T5 model on this dataset basically means performing a differentiated replication of LANCE on a much larger (+\textcolor{red}{XX\%} of instances) and more variegate (multiple logging libraries) dataset.
+We split the remaining pairs into training (80\%), validation (10\%) and test (10\%) set as reported in \tabref{tab:ds-summary-1}. Training and testing a T5 model on this dataset basically means performing a differentiated replication of LANCE on a much larger (+86\% of instances) and more variegate (multiple logging libraries) dataset.
 
 \subsubsection{Fine-tuning Dataset: Single Log Generation with IR} \label{sec:single-log-plus-IR}
 
@@ -106,7 +106,7 @@ While the dataset described in \secref{sec:multi-log-dataset} allows to build a 
 		\textit{Fine-tuning: Need4Log (50-50)}         & 98,848        & 92,126             &           & 12,257        & 11,468             &           & 11,627        &  11,627            \\
 		\textit{Fine-tuning: Need4Log (75-25)}         & 98,848        & 92,126             &           & 12,257        & 11,468             &           & 12,159        &  4,053             \\
 		\textit{Fine-tuning: Need4Log (25-75)}         & 98,848        & 92,126             &           & 12,257        & 11,468             &           & 3,875         &  11,627            \\ 
-		\textit{Fine-tuning: Need4Log (X-XX)}         & 98,848        & 92,126             &           & 12,257        & 11,468             &           & XX         &  XX,XXX            \\ 
+		\textit{Fine-tuning: Need4Log (2-98)}         & 98,848        & 92,126             &           & 12,257        & 11,468             &           & 238         &  11,627            \\ 
 		\bottomrule
 	\end{tabular}
 	\label{tab:ds-summary-2}
@@ -116,7 +116,7 @@ To train such a classifier we again start from the original set of 244,588 \java
 
 As it can be seen, four different versions of the test set have been created, to experiment \approach in difference scenarios. Let us explain such a choice. The test set should be representative of the real distribution of \java methods needing and not needing log statements. However, such a distribution cannot be computed in a reliable way. Indeed, one possibility we considered to build our dataset was to just consider all methods with and without log statements as training instances (as opposed to work only with methods having at least a log statement as we do). In a nutshell, the process would have been: (i) remove a random number of log statements from the methods with at least one log statement to create instances \emph{needing} logs; and (ii) assume that all methods without any log statement do not require logging. However, assuming that all methods in a software system not having log statements do not require logging is a very strong assumption. It is indeed possible that the project's developers just did not consider yet the usage of logs in a specific method or that, in a given project, logging is not yet a practice at all (thus all methods do not use log statements). This makes difficult a reliable computation of the number of methods needing and not needing logging. Also, such a problem justifies our decision to create  instances of methods needing/not needing a log statement starting from all methods having at least one log statement and using the process described above (\ie removing a random number of statements to create instances in need of logging, and not removing any log statement to create instances not needing logging). At least, we are sure that these are methods for which developers considered logging (since they have at least one log statement) and, thus, we can treat the developers' choices as an ``oracle''. 
 
-The four test sets in \tabref{tab:ds-summary-2} simulate four different distributions of methods needing/not needing log statements: balanced (50\% per category), unbalanced towards needing (75\%-25\%), and unbalanced towards not needing (25\%-75\%), and strongly unbalanced towards not needing (X\%-XX\%). The latter is a distribution we computed based on the methods we mined, in which XX\% of methods do not have log statements, while X\% have it. As said, this distribution is not completely reliable but, at least, gives an idea of what we found in the projects we analyzed.
+The four test sets in \tabref{tab:ds-summary-2} simulate four different distributions of methods needing/not needing log statements: balanced (50\% per category), unbalanced towards needing (75\%-25\%), and unbalanced towards not needing (25\%-75\%), and strongly unbalanced towards not needing (2\%-98\%). The latter is a distribution we computed based on the methods we mined, in which 98\% of methods do not have log statements, while 2\% have it. As said, this distribution is not completely reliable but, at least, gives an idea of what we found in the projects we analyzed.
 
 
 
@@ -183,4 +183,4 @@ Once identified the best learning rates to use, we fine-tuned the final models u
 
 
 \subsection{Generating Predictions}
-Once the T5 models have been pre-trained and fine-tuned, they can be used to generate predictions for the targeted tasks. We generate predictions using a greedy decoding strategy, meaning that the generated prediction is the result of selecting at each decoding step the token with the highest probability of appearing in a specific position. Thus, a single prediction (\ie the one maximizing the likelihood of among all the produced tokens) is generated for an input sequence (as compared to strategies such as beam-search \textcolor{red}{\cite{}} that generate multiple predictions).
+Once the T5 models have been pre-trained and fine-tuned, they can be used to generate predictions for the targeted tasks. We generate predictions using a greedy decoding strategy, meaning that the generated prediction is the result of selecting at each decoding step the token with the highest probability of appearing in a specific position. Thus, a single prediction (\ie the one maximizing the likelihood of among all the produced tokens) is generated for an input sequence (as compared to strategies such as beam-search\cite{freitag2017beam} that generate multiple predictions).
