@@ -6,6 +6,67 @@
   year={2018}
 }
 
+@inproceedings{tufano2022generating,
+	title={Generating accurate assert statements for unit test cases using pretrained transformers},
+	author={Tufano, Michele and Drain, Dawn and Svyatkovskiy, Alexey and Sundaresan, Neel},
+	booktitle={Proceedings of the 3rd ACM/IEEE International Conference on Automation of Software Test},
+	pages={54--64},
+	year={2022}
+}
+
+@misc{log4j,
+	howpublished = {https://logging.apache.org/log4j/2.x/},
+	title        = {Apache Log4J},
+	year         = {n.d.}
+}
+
+@misc{slf4j,
+	howpublished = {https://www.slf4j.org/},
+	title        = {Simple Logging Facade for Java (SLF4J)},
+	year         = {n.d.}
+}
+
+@misc{logback,
+	howpublished = {http://logback.qos.ch/},
+	title        = {Logback},
+	year         = {n.d.}
+}
+
+@misc{jcl,
+	howpublished = {https://docs.oracle.com/javase/8/docs/api/allclasses-frame.html},
+	title        = {Java Class Libraries},
+	year         = {n.d.}
+}
+
+
+@article{freitag2017beam,
+	title={Beam search strategies for neural machine translation},
+	author={Freitag, Markus and Al-Onaizan, Yaser},
+	journal={arXiv preprint arXiv:1702.01806},
+	year={2017}
+}
+
+@article{levenshtein1966,
+	added-at = {2008-03-15T10:37:17.000+0100},
+	author = {Levenshtein, VI},
+	journal = {Soviet Physics Doklady},
+	keywords = {lexicography similarity},
+	pages = 707,
+	title = {{Binary Codes Capable of Correcting Deletions, Insertions and Reversals}},
+	volume = 10,
+	year = 1966
+}
+
+@inproceedings{watson2020learning,
+	title={On learning meaningful assert statements for unit test cases},
+	author={Watson, Cody and Tufano, Michele and Moran, Kevin and Bavota, Gabriele and Poshyvanyk, Denys},
+	booktitle={Proceedings of the ACM/IEEE 42nd International Conference on Software Engineering},
+	pages={1398--1409},
+	year={2020}
+}
+
+@INPROCEEDINGS{tufano-mutants,  author={Tufano, Michele and Watson, Cody and Bavota, Gabriele and Di Penta, Massimiliano and White, Martin and Poshyvanyk, Denys},  booktitle={2019 IEEE International Conference on Software Maintenance and Evolution (ICSME)},   title={Learning How to Mutate Source Code from Bug-Fixes},   year={2019},  volume={},  number={},  pages={301-312},  doi={10.1109/ICSME.2019.00046}}
+
 @article{hancock2004jaccard,
 	title={Jaccard distance (Jaccard index, Jaccard similarity coefficient)},
 	author={Hancock, John M},
@@ -25,6 +86,73 @@
 	howpublished = {http://javaparser.org/},
 	title        = {JavaParser},
 	year         = {n.d.}
+}
+
+@inproceedings{metricsImprovement,
+	author = {Roy, Devjeet and Fakhoury, Sarah and Arnaoudova, Venera},
+	title = {Reassessing Automatic Evaluation Metrics for Code Summarization Tasks},
+	year = {2021},
+	isbn = {9781450385626},
+	publisher = {Association for Computing Machinery},
+	address = {New York, NY, USA},
+	url = {https://doi.org/10.1145/3468264.3468588},
+	doi = {10.1145/3468264.3468588},
+	abstract = {In recent years, research in the domain of source code summarization has adopted data-driven techniques pioneered in machine translation (MT). Automatic evaluation metrics such as BLEU, METEOR, and ROUGE, are fundamental to the evaluation of MT systems and have been adopted as proxies of human evaluation in the code summarization domain. However, the extent to which automatic metrics agree with the gold standard of human evaluation has not been evaluated on code summarization tasks. Despite this, marginal improvements in metric scores are often used to discriminate between the performance of competing summarization models. In this paper, we present a critical exploration of the applicability and interpretation of automatic metrics as evaluation techniques for code summarization tasks. We conduct an empirical study with 226 human annotators to assess the degree to which automatic metrics reflect human evaluation. Results indicate that metric improvements of less than 2 points do not guarantee systematic improvements in summarization quality, and are unreliable as proxies of human evaluation. When the difference between metric scores for two summarization approaches increases but remains within 5 points, some metrics such as METEOR and chrF become highly reliable proxies, whereas others, such as corpus BLEU, remain unreliable. Based on these findings, we make several recommendations for the use of automatic metrics to discriminate model performance in code summarization.},
+	booktitle = {Proceedings of the 29th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
+	pages = {1105–1116},
+	numpages = {12},
+	keywords = {machine translation, automatic evaluation metrics, code summarization},
+	location = {Athens, Greece},
+	series = {ESEC/FSE 2021}
+}
+
+@inproceedings{lin2004rouge,
+	title={Rouge: A package for automatic evaluation of summaries},
+	author={Lin, Chin-Yew},
+	booktitle={Text summarization branches out},
+	pages={74--81},
+	year={2004}
+}
+
+@inproceedings{meteor,
+	title = "{METEOR}: An Automatic Metric for {MT} Evaluation with Improved Correlation with Human Judgments",
+	author = "Banerjee, Satanjeev  and
+	Lavie, Alon",
+	booktitle = "Proceedings of the {ACL} Workshop on Intrinsic and Extrinsic Evaluation Measures for Machine Translation and/or Summarization",
+	month = jun,
+	year = "2005",
+	address = "Ann Arbor, Michigan",
+	publisher = "Association for Computational Linguistics",
+	url = "https://aclanthology.org/W05-0909",
+	pages = "65--72",
+}
+
+@article{Holm1979a,
+ Title={A simple sequentially rejective multiple test procedure},
+ Author={Holm, Sture},
+ Journal={Scandinavian journal of statistics},
+ Pages={65--70},
+ Year={1979},
+ Publisher={JSTOR}
+}
+
+@book{Gris2005a,
+ title={Effect sizes for research: A broad practical approach.},
+ author={Grissom, Robert J and Kim, John J},
+ year={2005},
+ publisher={Lawrence Erlbaum Associates Publishers}
+}
+
+@article{wilcoxon,
+	ISSN = {00994987},
+	author = {Frank Wilcoxon},
+	journal = {Biometrics Bulletin},
+	number = {6},
+	pages = {80--83},
+	publisher = {[International Biometric Society, Wiley]},
+	title = {Individual Comparisons by Ranking Methods},
+	volume = {1},
+	year = {1945}
 }
 
 

@@ -4,3 +4,11 @@
 \section{Threats to Validity} \label{sec:threats}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\textbf{Construct validity.} The building of our fine-tuning datasets rely on the assumption that the exploited code instances, as written by developers, represent the ``correct'' predictions that the models should generate. This is especially true for the classifier aimed at predicting whether log statements are needed. For example, the instances that we labeled as ``\emph{not needing log statements}'' are methods featuring $n \geq 1$ log statements from which we did not remove any log statement. This means that we assume that these methods need exactly $n$ log statements (\ie the ones injected by the original developers) and not one more. This is clearly a strong assumption. However, using the code written by the original developers as ``oracle'' is a popular practice in applications of DL to SE \cite{tufano2022using, Tufano:tosem2019, mastropaolo2021empirical, mastropaolo2022using, tufano-mutants, watson2020learning, tufano2022generating}.
+
+
+\textbf{Internal validity.}  We performed the same, limited hyperparameter tuning by Mastropaolo \etal \cite{mastropaolo2021studying}, relying on the best architecture identified by Raffel \etal \cite{raffel2019exploring} for the other parameters. We acknowledge that additional tuning can result in improved performance.
+
+
+\textbf{External validity.} Our research questions have been answered using a dataset being 88\% larger than that used by Mastropaolo \etal \cite{mastropaolo2021studying}. Also, our dataset is more variegated, featuring projects using different build systems (as compared to the Maven-only policy used in \cite{mastropaolo2021studying}) and having dependencies towards different logging libraries (differently from the Log4j-only policy of \cite{mastropaolo2021studying}). Still, we do not claim generalizability of our findings for different population of projects, especially those written in other programming languages.
