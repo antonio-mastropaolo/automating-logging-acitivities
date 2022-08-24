@@ -19,6 +19,12 @@
 \usepackage{booktabs}
 \usepackage{fontawesome}
 
+\usepackage{amssymb}% http://ctan.org/pkg/amssymb
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+
 \newcommand{\ie}{\emph{i.e.,}\xspace}
 \newcommand{\eg}{\emph{e.g.,}\xspace}
 \newcommand{\etc}{etc.\xspace}
@@ -33,6 +39,7 @@
 \newcommand{\highlight}[1]{{\color{purple} \textbf{#1}}}
 \newcommand{\approach}{LEONID\xspace} %Log gEneratiON using Information retrieval and Deep learning
 \newcommand{\java}{\emph{Java}\xspace}
+
 	
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
 		\node[shape=circle,draw,inner sep=1pt] (char) {#1};}}

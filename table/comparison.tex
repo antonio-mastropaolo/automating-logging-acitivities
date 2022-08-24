@@ -1,0 +1,25 @@
+% !TEX root = ../main.tex
+
+% Zhu \etal~\cite{zhu2015learning} \textsc{LogAdvisor}
+% Yao \etal~\cite{yao2018log4perf} \textsc{Log4Perf}
+
+
+\begin{table*}[]
+\centering
+    \caption{Number of methods in the datasets used in our study}
+        \label{tab:ds-summary-1}
+\begin{tabular}{lll|ccc|cc|c}
+
+\toprule
+\multirow{2}{*}{\textbf{Ref.}}                  & \multirow{2}{*}{\textbf{Venue}} & \multirow{2}{*}{\textbf{Name}} & \multicolumn{3}{c|}{\textbf{Log}} & \multicolumn{2}{c|}{\textbf{Log injection}} & \multirow{2}{*}{\textbf{Need for log statements}} \\
+                                                &                                 &                                & Level    & Position   & Message   & Single              & Multiple              &                                                  \\\midrule
+Zhu \etal~\cite{zhu2015learning}                & ICSE 2015                       & \textsc{LogAdvisor}            & \xmark   & \cmark     & \xmark    & \cmark              & \xmark                &  \xmark                                          \\
+Yao \etal~\cite{yao2018log4perf}                & ICPE 2018                       & \textsc{Log4Perf}              & \xmark   & \cmark     & \xmark    & \cmark              & \xmark                &  \cmark                                          \\
+Mizouchi \etal~\cite{mizouchi2019padla}         & ICPC 2019                       & \textsc{PADLA}                 & \cmark   & \xmark     & \xmark    & \cmark              & \cmark                &  \xmark                                          \\
+Li \etal~\cite{li2020shall}                     & ASE 2020                        & \textsc{}                      & \xmark   & \cmark     & \xmark    & \cmark              & \xmark                &  \xmark                                          \\
+Li \etal \cite{li2021deeplv}                    & ICSE 2021                       & \textsc{DeepLV}                & \cmark   & \cmark     & \xmark    & \cmark              & \xmark                &  \xmark                                          \\
+Mastropaolo \etal~\cite{mastropaolo2022using}   & ICSE 2022                       & \textsc{LANCE}                 & \cmark   & \cmark     & \cmark    & \cmark              & \xmark                &  \xmark                                          \\
+Our tool \cite{replication_package}             & Under review                    & \textsc{LEONID}                & \cmark   & \cmark     & \cmark    & \cmark              & \cmark                &  \cmark                                          \\
+\bottomrule
+\end{tabular}
+\end{table*}
