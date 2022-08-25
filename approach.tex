@@ -51,7 +51,9 @@ Finally, to avoid any possible overlap between the training, evaluation, and tes
 
 \subsubsection{Pre-Training Dataset}
 \label{sub:pretraining}
-Since the goal of pre-training is to provide T5 with general knowledge about the language of interest (\ie Java), we used for pre-training all methods not featuring a log statement (the latter will be used for the fine-tuning datasets). For the pre-training we adopted a classic \emph{masked language model} task, which consists in randomly masking 15\% of the tokens composing a training instance (\ie a Java method in our case) asking the model to predict them. \figref{fig:pre-training} depicts a pre-training instance from our dataset.
+Since the goal of pre-training is to provide T5 with general knowledge about the language of interest (\ie Java), we used for pre-training all methods not featuring a log statement (the latter will be used for the fine-tuning datasets). For the pre-training we adopted a classic \emph{masked language model} task, which consists in randomly masking 15\% of the tokens composing a training instance (\ie a Java method in our case) asking the model to predict them. 
+Our replication package \cite{replication} contains an example of prepared pre-training instance from our dataset.
+%\figref{fig:pre-training} depicts a pre-training instance from our dataset.
 
 
 \begin{figure}[h!]
@@ -60,11 +62,11 @@ Since the goal of pre-training is to provide T5 with general knowledge about the
 	\caption{Example of augmented input featuring log message retrieved from the ($k=1$) most similar coding context.}
 \end{figure}
 
-\begin{figure}[h!]
-	\label{fig:pre-training}
-	\includegraphics[width=\columnwidth]{img/pre-training.pdf}
-		\caption{Example of Pre-training instance}
-\end{figure}
+%\begin{figure}[h!]
+%	\label{fig:pre-training}
+%	\includegraphics[width=\columnwidth]{img/pre-training.pdf}
+%		\caption{Example of Pre-training instance}
+%\end{figure}
 
 
 
@@ -130,27 +132,27 @@ Since we use software-specific corpora for pre-training and fine-tuning, we trai
 We pre-trained T5 for 500k steps on the pre-training dataset composed by 12,671,475 \java methods (\tabref{tab:ds-summary-1}). Given the size of our dataset and the batch size, the 500k steps correspond to $\sim$5 epochs. The pre-training objective we used (\ie the masked language model) is the same that has been exploited by Mastropaolo \etal \cite{mastropaolo2022using}. The maximum size of the input/output was set to 512 tokens.
 
 \subsection{Hyperparameter Tuning}
-Once pre-trained the model, we replicated the same hyperparameter tuning performed by Mastropaolo \etal \cite{mastropaolo2021studying} when presenting LANCE. Such a procedure has been executed for each of the fine-tuning datasets previously described. In particular, we experimented the performance of T5 when using four different learning rate scheduler: (i) \textit{Constant Learning Rate} (C-LR): the learning rate is fixed during the whole training; (ii) \textit{Inverse Square Root Learning Rate} (ISR-LR): the learning rate decays as the inverse square root of the training step; (iii) \textit{Slanted Triangular Learning Rate \cite{howard2018universal}} (ST-LR): the learning rate first linearly increases and then linearly decays to the starting learning rate; and (iv) \textit{Polynomial Decay Learning Rate} (PD-LR): the learning rate decays polynomially from an initial value to an ending value in the given decay steps. \tabref{tab:learning-rates} reports all the parameters used for each scheduling strategy.
+Once pre-trained the model, we replicated the same hyperparameter tuning performed by Mastropaolo \etal \cite{mastropaolo2021studying} when presenting LANCE. Such a procedure has been executed for each of the fine-tuning datasets previously described. In particular, we experimented the performance of T5 when using four different learning rate scheduler: (i) \textit{Constant Learning Rate} (C-LR): the learning rate is fixed during the whole training; (ii) \textit{Inverse Square Root Learning Rate} (ISR-LR): the learning rate decays as the inverse square root of the training step; (iii) \textit{Slanted Triangular Learning Rate \cite{howard2018universal}} (ST-LR): the learning rate first linearly increases and then linearly decays to the starting learning rate; and (iv) \textit{Polynomial Decay Learning Rate} (PD-LR): the learning rate decays polynomially from an initial value to an ending value in the given decay steps. Due to space limitations, we report all the parameters used for each scheduling strategy in our online appendix \cite{replication}.
 
-\begin{table}[h]
-	\centering
-	\caption{Configurations for the experimented learning rates}
-	\begin{tabular}{ll}
-		\hline
-		\textbf{Learning Rate Type} & \textbf{Parameters}               \\ \hline
-		Constant                     & \textit{LR = 0.001}               \\
-		Inverse Square Root         & \textit{LR\textsubscript{starting} = 0.01}  \\
-		& \textit{Warmup = 10,000}          \\
-		Slanted Triangular          & \textit{LR\textsubscript{starting} = 0.001} \\
-		& \textit{LR\textsubscript{max} = 0.01}       \\
-		& \textit{Ratio = 32}               \\
-		& \textit{Cut = 0.1}                \\
-		Polynomial Decay            & \textit{LR\textsubscript{starting} = 0.01}  \\
-		& \textit{LR\textsubscript{end} = 0.001}      \\
-		& \textit{Power = 0.5}              \\ \hline
-	\end{tabular}
-	\label{tab:learning-rates}
-\end{table}
+%\begin{table}[h]
+%	\centering
+%	\caption{Configurations for the experimented learning rates}
+%	\begin{tabular}{ll}
+%		\hline
+%		\textbf{Learning Rate Type} & \textbf{Parameters}               \\ \hline
+%		Constant                     & \textit{LR = 0.001}               \\
+%		Inverse Square Root         & \textit{LR\textsubscript{starting} = 0.01}  \\
+%		& \textit{Warmup = 10,000}          \\
+%		Slanted Triangular          & \textit{LR\textsubscript{starting} = 0.001} \\
+%		& \textit{LR\textsubscript{max} = 0.01}       \\
+%		& \textit{Ratio = 32}               \\
+%		& \textit{Cut = 0.1}                \\
+%		Polynomial Decay            & \textit{LR\textsubscript{starting} = 0.01}  \\
+%		& \textit{LR\textsubscript{end} = 0.001}      \\
+%		& \textit{Power = 0.5}              \\ \hline
+%	\end{tabular}
+%	\label{tab:learning-rates}
+%\end{table}
 
 Each model has been run for 100k training steps on the fine-tuning dataset. Then, its performance has been assessed on the evaluation set in terms of correct predictions (\ie cases in which the generated output is equal to the target one). For the generative models injecting log statements this means that they outputted the \java method featuring all correct log statements in the expected positions. For the classifier, it means that it correctly predicted the need for log statements in a given \java method. The results achieved with each learning rate are reported in \tabref{tab:hp-results}. In total, our hyperparameters tuning required training and evaluating 28 models: For each of the 7 fine-tuning datasets in \tabref{tab:hp-results} we experimented 4 different learning rates. Given the achieved results, we will use the ISQ-LR for the generative models, and the PD-LR for the classifier when fine-tuning the models. Concerning the ``replication of LANCE'' (\ie fine-tuning T5 on the dataset \emph{Fine-tuning: Single Log Generation} in \tabref{tab:ds-summary-1}), we did not perform any hyperparameter tuning, but relied on the best configuration reported in the original paper \cite{mastropaolo2021studying}, thus using the PD-LR.
 
