@@ -18,11 +18,11 @@ For instance, the last row of \tabref{tab:single-train-results} reports the resu
 
 The last two columns of \tabref{tab:single-train-results} report the $p$-value and the Odds Ration (OR) effect size we compute using the Mc-Nemar's test \cite{mcnemar}.
 
-By Comparing the correct predictions (\ie first row of \tabref{tab:single-train-results}) achieved by LEONID and LANCE, it emerges that LEONID performs slightly better than LANCE, achieving 27.26\% of correct predictions, against 26.79\% achieved by LANCE.  As it can be seen, the (adjusted) $p$-value indicates a statistically significant difference, with LEONID having 1.12 higher odds to provide a correct prediction compared to LANCE. 
-As for the other ``components'', what emerges is that LEONID perform slightly worse compared to LANCE.
-This is true especially, for the log variable name, the log level and when considering, both components along with the log position (\ie last raw of \tabref{tab:single-train-results}). 
-In these cases, the (adjusted) $p$-values indicate a statistically significant difference with ORs ranging between 0.80 to 0.91 in favor of LANCE.  Concerning the log messages and the position where the log statements have been injected, LEONID performs better than LANCE.
-In detail, we found out that LEONID can generate 31.55\% of correct log messages while LANCE achieves 30.16\% of correct generated log messages. The Mc-Nemar's test computed for such component, indicates a statistically significant difference ($p$-value $<$ 0.01), with LEONID being 1.36 more likely than LANCE when generating a log messages as a real developer would do.
+By Comparing the correct predictions (\ie first row of \tabref{tab:single-train-results}) achieved by LEONID and LANCE, it emerges that LEONID performs slightly better than LANCE, achieving 27.26\% of correct predictions against 26.79\% achieved by LANCE. As it can be seen, the (adjusted) $p$-value indicates a statistically significant difference, with LEONID having 1.12 higher odds of providing a correct prediction compared to LANCE. 
+As for the other ``components'', what emerges is that LEONID performs slightly worse compared to LANCE.
+This is true, especially for the log variable name, the log level, and, when considering, both components along with the log position (\ie last raw of \tabref{tab:single-train-results}). 
+In these cases, the (adjusted) $p$-values indicate a statistically significant difference with ORs ranging between 0.80 to 0.91 in favor of LANCE. Concerning the log messages and the position where the log statements have been injected, LEONID performs better than LANCE.
+In detail, we found out that LEONID can generate 31.55\% of correct log messages while LANCE achieves 30.16\% of correct generated log messages. The Mc-Nemar's test computed for such component indicates a statistically significant difference ($p$-value $<$ 0.01), with LEONID being 1.36 more likely than LANCE when generating a log message as a real developer would do.
 
 For the position of log statements, the difference between the two models are almost negligible. To this extent, LEONID can correctly injects log statements in \java method in 82.35\% of cases as compared to LANCE, which achieves 82.28\%. Such small differences are also captured by the statistical test we performed, for which the high $p$-value of 0.71 fails in pointing out any statistically significant difference between the two distributions.
 
@@ -30,16 +30,25 @@ As for the quality of the log messages, \tabref{tab:log-messages-stats} reports 
 
 In detail, we first report the BLEU score computed at corpus level, then we also report the METEOR metric and to conclude the ROUGE-LCS metric and the LEVENSHTEIN distance complement the set of NLP-related metrics we decide to use for evaluating the quality of the log messages.
 
-By analyzing \tabref{tab:log-messages-stats}, the first thing that leap to eyes is the difference in terms of BLEU-A when comparing the performances achieved by LANCE against LEONID. In particular, as the coding context increases, such a difference tends to become more pronounced, with gains ranging between 2.8 to 3.6 percentage points in favor of LEONID. A similar trend is found when looking at different overlapping $n$-grams (\ie BLEU-1, BLEU-2, BLUE-3 and BLEU-4) as well. 
+By analyzing \tabref{tab:log-messages-stats}, the first thing that leap to eyes is the difference in terms of BLEU-A when comparing the performances achieved by LANCE against LEONID. In particular, as the coding context increases, such a difference tends to become more pronounced, with gains ranging between 2.8 to 3.6 percentage points in favor of LEONID. A similar trend is found when looking at different overlapping $n$-grams (\ie BLEU-1, BLEU-2, BLUE-3 and BLEU-4). 
 
-Focusing on the METEOR score, we found LEONID to generate log messages that are more likely to be perceived of higher quality by humans \cite{meteor}, as compared to LANCE, with scores that on average are 1.5\% higher. We speculate that such a result is the consequence of force-feeding the model with log messages from which can learn from and thus recommend more meaningful log messages.
+Focusing on the METEOR score, we found LEONID to generate log messages that are more likely to be perceived of higher quality by humans \cite{meteor}, as compared to LANCE, with scores that, on average, are 1.5\% higher. We speculate that such a result is the consequence of force-feeding the model with log messages from which it can learn and thus recommend more meaningful log messages.
 
 As for the ROUGE-LCS, it emerges that when augmenting the input instances with log messages coming from the training set, the performances achieved by LEONID with different coding context, are always higher than LANCE, with the highest value of 44.33 points achieved with a coding context of $k=5$ as compared to 42.19 points obtained by LANCE.
 
-Finally, the Normalized LEVENSHTEIN distance indicates how log messages produced by LEONID ($k=5$), would require up to 41.85\% of changes to match the ones written by developers. If contrasting such a result with the LEVENSHTEIN distance computed for LANCE, we realize that (on average) the number of words that a developer is asked to change is 44.02\% higher when using LANCE as compared to LEONID.
+Finally, the Normalized LEVENSHTEIN distance indicates how log messages produced by LEONID ($k=5$) would require up to 41.85\% of changes to match the ones written by developers. If contrasting such a result with the LEVENSHTEIN distance computed for LANCE, we realize that (on average) the number of words that a developer is asked to change is 44.02\% higher when using LANCE as compared to LEONID.
 
 We complement the discussion of the NLP-related metrics by performing the Wilcoxon signed-rank test \cite{wilcoxon}, adjusting $p$-values to account for multiple comparisons using the Holm's correction procedure \cite{Holm1979a}. 
-From the results we report in \tabref{tab:test-wilcoxon}, it comes to light how for each metric, we always have difference stastistically significant, with a negligible effect size for all the metrics, in favor of LEONID (for the Levenshtein distance a positive d is in favor of LEONID, as it is a distance). 
+From the results we report in \tabref{tab:test-wilcoxon}, it comes to light how, for each metric, we always have a difference statistically significant, with a negligible effect size for all the metrics, in favor of LEONID (for the Levenshtein distance a positive d is in favor of LEONID, as it is a distance). 
+
+Concerning the qualitative analysis, among the 300 partially correct predictions analyzed for LEONID, we found 198 of them (66\%) to report the same information of the target. In other words, the recommended log message was different but semantically equivalent to the target (\ie oracle). The remaining 102 (34\%) predictions, reported a log message different or not meaningful as compared to the target. 
+For LANCE, we found 192 (64\%)  partially correct predictions to report a meaningful log message, with 108 (36\%) of them being considered as not meaningful.
+Such result confirms the finding of Mastropaolo \etal \cite{mastropaolo2022using}, meaning that a strict quantitative evaluation would produce misleading results, especially when narrowing down the focus only on the correct predictions. 
+Furthermore, the bigger code base (almost twice as bigger) that we leveraged to train LANCE and LEONID produced a substantial effect in boosting the performances of both models on each experimented metric, with a qualitative evaluation that allowed us to estimate a 66\% and 64\% of predictions still valuable when using LEONID and LANCE respectively.
+
+To give a better understanding to the reader of such cases, \figref{} reports .... \TODO{LUCA please continue here}
+
+
 
 %if we have space put this back
 %\begin{figure*}[h]
@@ -117,21 +126,21 @@ As explained in \secref{sec:design}, for RQ$_{2}$ we would not be able to comput
 
 \figref{fig:rq3-cm} reports the confusion matrices with their respective values of accuracy, precision and recall (on the bottom of the figure) for each test-set in \tabref{tab:ds-summary-2}.
 
-When half of the methods need at least one log statement, and the other half do not need any (50-50 split), LEONID reports an accuracy of 0.96, while achieving a precision of 0.98 and a recall of 0.94. In contrast the \textit{optimistic} and \textit{pessimistic} classifier would achieve 0.50 of accuracy and precision, while reporting a recall of 1.0. 
-The \textit{random} classifier on the same test-set (50-50), achieves 0.50 of accuracy, precision and recall (as expected). 
+When half of the methods need at least one log statement, and the other half do not need any (50-50 split), LEONID reports an accuracy of 0.96 while achieving a precision of 0.98 and a recall of 0.94. In contrast the \textit{optimistic} and \textit{pessimistic} classifier would achieve 0.50 of accuracy and precision, while reporting a recall of 1.0. 
+The \textit{random} classifier on the same test-set (50-50), achieves 0.50 of accuracy, precision, and recall (as expected). 
 
 When testing LEONID on the 75-25 split, there is a slightly increase in terms of precision as compared to the 50-50 split, 0.98 \emph{vs} 0.99. Consequently, the accuracy loose 0.01 points (0.95) as compared to the previous 50-50 split. Instead, the recall keeps its value fixed at 0.94.
 The \textit{optimistic} classifier reports a value of 0.75 for both accuracy and precision, while achieving a recall of 1.0. As expected, the \textit{pessimistic} classifier achieves 0.25 points for both accuracy and precision and, 1.0 of recall. As for the \textit{random} classifier, we found out an accuracy and a recall of 0.5, with a precision of 0.75.
 
-When LEONID is tested in a scenario in which the number of methods requiring log statements is outweighed by the number of methods who do not need log statements (25-75 split), precision and recall achieves both 0.94. The accuracy for such a scenario is 0.97. 
-On the other hand, the \textit{optimistic} classifier would achieve a recall of 1.0, with an accuracy and precision both of 0.25 that contrast the results achieved with the \textit{pessimistic} classifier, which would report a recall of 1.0,  with accuracy and precision of 0.75. On such dataset, the \textit{random} classifier would ensure a precision of 0.25, with an accuracy and recall of 0.50.
+When LEONID is tested in a scenario where the number of methods requiring log statements is outweighed by the number of methods that do not need log statements (25-75 split), precision and recall achieve both 0.94. The accuracy for such a scenario is 0.97. 
+On the other hand, the \textit{optimistic} classifier would achieve a recall of 1.0, with accuracy and precision both of 0.25, which contrasts the results achieved with the \textit{pessimistic} classifier, which would report a recall of 1.0,  with accuracy and precision of 0.75. On such dataset, the \textit{random} classifier would ensure a precision of 0.25, with accuracy and recall of 0.50.
 
-Finally, as for the test-set resembling the original distribution of \java methods we mined (2-98 split), LEONID achieves an accuracy of 0.98, and a recall of 0.96. Instead, the precision goes down to 0.51.
-As for the naive classifiers, we found out that when using the \textit{optimistic}, the achieved accuracy and precision would be both of 0.02 points, with a recall of 1.0.
-In contrast, the \textit{pessimistic} performs better than LEONID (as expected), achieving 0.97 of accuracy and precision, and 1.0 of recall.
-The \textit{random} classifier, on the other hand, it would ensure an accuracy 0.50, a recall of 0.53, while achieving only 0.02 of precision.
+Finally, as for the test-set resembling the original distribution of \java methods we mined (2-98 split), LEONID achieves an accuracy of 0.98 and a recall of 0.96. Instead, the precision goes down to 0.51.
+As for the naive classifiers, we found out that when using the \textit{optimistic}, the achieved accuracy and precision would be both 0.02 points, with a recall of 1.0.
+In contrast, the \textit{pessimistic} performs better than LEONID (as expected), achieving 0.97 for both accuracy and precision, and 1.0 for recall.
+The \textit{random} classifier, on the other hand, would ensure accuracy of 0.50, and a recall of 0.53, while achieving only 0.02 of precision.
 
-
+\ANTONIO{ If we have space, we can add the statistical analysis on the classifiers}
 
 
 
