@@ -5,26 +5,25 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We start by contrasting the performances of LEONID and LANCE (\secref{sec:rq1}). We follow the quantitative analysis by presenting qualitative examples of partially correct predictions in which only the log message synthesized by LEONID is wrong, while the other information (\ie variable, log level, position) are correctly predicted, but still meaningful as suggestion for developers. Then, we outline the results achieved by LEONID when injecting multiple log statements (\secref{sec:rq2}). Finally, \secref{sec:rq3} presents the results achieved by LEONID when deciding whether or not log statements are needed in a given \java method.
+We discuss the achieved results by research question.
 
 
-\subsubsection{Performance of LEONID in injection single complete log statements in \java methods (RQ$_{1}$)}
+\subsubsection{RQ$_{1}$: Injecting a single log statement}
 \label{sec:rq1}
 
-\tabref{tab:single-train-results} reports the results achieved by the LEONID and LANCE, in terms of correct and partially correct predictions. We report the correct predictions for all combinations of the four ``components'' to predict (\ie log variable, log level, position where to inject it, and log message). To this extent, we analyze cases in which both LEONID and LANCE managed to correctly inject a log statement in a \java method and cases in which  at least one of the four components to predict was correct (\ie partially correct prediction).
-To facilitate the reading of \tabref{tab:single-train-results}, we briefly explain how to symbols featuring it.
-Each row can includes only two out of three symbols: (i) the check mark (\cmark) indicates that the results reported in that row refer to log statements in which the component ($c$) was correctly predicted. The dash mark ($-$), instead, indicates that $c$ can be either correct or wrong for the predictions in that row. Finally, the cross mark (\xmark) indicates that the component was wrongly predicted for the corresponding log statements.
+\tabref{tab:single-train-results} reports the results achieved by \approach and LANCE, in terms of correct and partially correct predictions for the task of single-log injection. For \approach we only report the results when $k=5$, since this is the variant that achieved the best performance (results with $k=1$ and $k=3$ are available in \cite{replication}). The first row of \tabref{tab:single-train-results} shows the percentage of correct predictions by both approaches, which is slightly higher for \approach (+1.8\% of relative improvement, from 26.78\% to 27.26\%). This difference is statistically significant (adj. $p$-value $<$ 0.01) with 1.12 higher odds of obtaining a correct prediction from \approach as compared to LANCE. 
+
+\input{results-table.tex}
+
+The four subsequent rows report the cases in which one of the four log-statement components (variable, level, message, and position) was correctly predicted (\cmark), independently from whether the other three components were correct or not ($-$). As it can be seen, there is no significant difference in the prediction of the log position, with both techniques correctly predicting it in $\sim$82.3\% of cases. Differences are observed for the log variable and level in favor of LANCE (+1.0\% and +0.9\% relative improvement), and for the log message in favor of \approach (+4.6\% relative improvement). The log message is the part for which we observed the strongest OR among all comparisons. Considering that the only difference between \approach and LANCE is the usage of IR, the improvement in the generation of meaningful log messages we targeted has been at least partially achieved. The latter has, however, a small price to pay in the correct prediction of the log variable and level. Still, for these elements \approach is able to generate a correct prediction in over 73.5\% of cases, while the correct generation of the log message still represents the Achilles' heel of these techniques, with 31.55\% correct predictions achieved by \approach. Thus, we believe that improvements on the log message predictions should be favored even at the expense of losing a bit of prediction capabilities on other elements.
+
+
+
 For instance, the last row of \tabref{tab:single-train-results} reports the results achieved by LEONID and LANCE, when the two models correctly synthesized the log variable name, the log level and the entire the log statement has been injected in the correct position. In such a case however, the log message has been wrongly predicted, as it can be seen thanks the cross mark (\xmark) in the log message column.
 
-The last two columns of \tabref{tab:single-train-results} report the $p$-value and the Odds Ratio (OR) effect size we compute using the Mc-Nemar's test \cite{mcnemar}.
 
-By Comparing the correct predictions (\ie first row of \tabref{tab:single-train-results}) achieved by LEONID and LANCE, it emerges that LEONID performs slightly better than LANCE, achieving 27.26\% of correct predictions against 26.79\% achieved by LANCE. As it can be seen, the (adjusted) $p$-value indicates a statistically significant difference, with LEONID having 1.12 higher odds of providing a correct prediction compared to LANCE. 
-As for the other ``components'', what emerges is that LEONID performs slightly worse compared to LANCE.
-This is true, especially for the log variable name, the log level, and, when considering, both components along with the log position (\ie last raw of \tabref{tab:single-train-results}). 
-In these cases, the (adjusted) $p$-values indicate a statistically significant difference with ORs ranging between 0.80 to 0.91 in favor of LANCE. Concerning the log messages and the position where the log statements have been injected, LEONID performs better than LANCE.
-In detail, we found out that LEONID can generate 31.55\% of correct log messages while LANCE achieves 30.16\% of correct generated log messages. The Mc-Nemar's test computed for such component indicates a statistically significant difference ($p$-value $<$ 0.01), with LEONID being 1.36 more likely than LANCE when generating a log message as a real developer would do.
 
-For the position of log statements, the difference between the two models are almost negligible. To this extent, LEONID can correctly injects log statements in \java method in 82.35\% of cases as compared to LANCE, which achieves 82.28\%. Such small differences are also captured by the statistical test we performed, for which the high $p$-value of 0.71 fails in pointing out any statistically significant difference between the two distributions.
+
 
 As for the quality of the log messages, \tabref{tab:log-messages-stats} reports the results computed using the four NLP metrics presented in (\secref{sec:design}) for both models: LANCE and LEONID. For the latter, we report the results when different coding contexts (\ie $k=1$, $k=3$ and $k=5$) are used. 
 
@@ -60,37 +59,37 @@ To give a better understanding to the reader of such cases, \figref{} reports ..
 
 
 
-\input{results-table.tex}
+
 
 
 \begin{table}[h]
 	\centering
-	\caption{Evaluation Metrics on Log Messages: LEONID \emph{vs} LANCE\vspace{-0.2cm}}
+	\caption{RQ$_1$: Evaluation Metrics on Log Messages: LEONID \emph{vs} LANCE\vspace{-0.2cm}}
 	\scriptsize
 	\label{tab:log-messages-stats}
-	 \resizebox{.5\textwidth}{!}{
-	\begin{tabular}{lrrrrrr}
+	 %\resizebox{.5\textwidth}{!}{
+	\begin{tabular}{lrr}
 		\toprule
-		& {\bf LANCE} & {\bf LEONID ($k=1$)} &  {\bf LEONID ($k=3$)} &  {\bf LEONID ($k=5$)} \\\midrule
-		BLEU-A \cite{papineni2002bleu}& 31.98 & 34.86  & 35.07 & \bf 35.36\\
-			\hspace{0.2cm} BLEU-1 & 47.30 &  49.10 & 49.70  & \bf 50.00\\
-			\hspace{0.2cm} BLEU-2 & 36.30 & 38.70 & 39.20 & \bf 39.60\\
-			\hspace{0.2cm} BLEU-3 & 33.90 &  33.53 & 34.50 & \bf 35.00\\
-			\hspace{0.2cm} BLEU-4 & 31.40 & 33.53 & 31.80 & \bf 32.40\\
-		METEOR \cite{meteor} & 58.60 & 60.03  & \bf 60.43 & 60.35 \\
-		ROUGE-LCS \cite{lin2004rouge} &  &  & & \\
-		\hspace{0.2cm} $precision$ & 42.57 & 44.67 & 44.51  & \bf 44.68\\
-		\hspace{0.2cm} $recall$ & 44.04 &  45.94 & 45.80 & \bf 46.01\\
-		\hspace{0.2cm} $fmeasure$ & 42.19 & 44.26 & 44.14 & \bf 44.33\\
-		LEVENSHTEIN \cite{levenshtein1966} & 44.02 & 42.27  & 41.91 & \bf 41.85 \\\bottomrule
+		& {\bf LANCE}  &  {\bf LEONID ($k=5$)} \\\midrule
+		BLEU-A \cite{papineni2002bleu}& 31.98 & \bf 35.36\\
+			\hspace{0.2cm} BLEU-1 & 47.30  & \bf 50.00\\
+			\hspace{0.2cm} BLEU-2 & 36.30  & \bf 39.60\\
+			\hspace{0.2cm} BLEU-3 & 33.90  & \bf 35.00\\
+			\hspace{0.2cm} BLEU-4 & 31.40  & \bf 32.40\\
+		METEOR \cite{meteor} & 58.60  & \bf 60.35 \\
+		ROUGE-LCS \cite{lin2004rouge} &  \\
+		\hspace{0.2cm} $precision$ & 42.57 & \bf 44.68\\
+		\hspace{0.2cm} $recall$ & 44.04 &   \bf 46.01\\
+		\hspace{0.2cm} $fmeasure$ & 42.19 &  \bf 44.33\\
+		LEVENSHTEIN \cite{levenshtein1966} & 44.02 & \bf 41.85 \\\bottomrule
 	\end{tabular} 
 	\vspace{-0.2cm}
-}
+%}
 \end{table}
 
 \begin{table}[ht]
 	\centering
-	\caption{Statistical Tests: LEONID \emph{vs} LANCE\vspace{-0.2cm}}
+	\caption{RQ$_1$: Statistical Tests: LEONID \emph{vs} LANCE\vspace{-0.3cm}}
 	\scriptsize
 	\label{tab:test-wilcoxon}
 	 \resizebox{.5\textwidth}{!}{
@@ -98,15 +97,15 @@ To give a better understanding to the reader of such cases, \figref{} reports ..
 		\toprule
 		\textbf{Comparison} & \textbf{Metric} & \textbf{\emph{p}-value} & \textbf{d} \\ 
 		\midrule
-		\multirow{3}{*}{LANCE  \emph{vs} LEONID ($k=1$)} & BLEU-4 & $<$0.001 & -0.022 (N) \\ 
-			& METEOR & $<$0.001 & -0.025 (N) \\
-		& ROUGE-LCS (f-measure) & $<$0.001 & -0.025 (N) \\ 
-		& LEVENSHTEIN & $<$0.001 & +0.023 (N) \\\midrule
-		\multirow{3}{*}{LANCE  \emph{vs} LEONID ($k=3$)} & BLEU-4 & $<$0.001 & -0.026 (N) \\ 
-		& METEOR & $<$0.001 & -0.029 (N) \\
-		& ROUGE-LCS (f-measure) & $<$0.001 & -0.023 (N) \\ 
-		& LEVENSHTEIN & $<$0.001 & +0.027 (N) \\\midrule
-			\multirow{3}{*}{LANCE  \emph{vs} LEONID ($k=5$)} & BLEU-4 & $<$0.001 & -0.026 (N) \\ 
+%		\multirow{3}{*}{LANCE  \emph{vs} LEONID ($k=1$)} & BLEU-4 & $<$0.001 & -0.022 (N) \\ 
+%			& METEOR & $<$0.001 & -0.025 (N) \\
+%		& ROUGE-LCS (f-measure) & $<$0.001 & -0.025 (N) \\ 
+%		& LEVENSHTEIN & $<$0.001 & +0.023 (N) \\\midrule
+%		\multirow{3}{*}{LANCE  \emph{vs} LEONID ($k=3$)} & BLEU-4 & $<$0.001 & -0.026 (N) \\ 
+%		& METEOR & $<$0.001 & -0.029 (N) \\
+%		& ROUGE-LCS (f-measure) & $<$0.001 & -0.023 (N) \\ 
+%		& LEVENSHTEIN & $<$0.001 & +0.027 (N) \\\midrule
+			\multirow{4}{*}{LANCE  \emph{vs} LEONID ($k=5$)} & BLEU-4 & $<$0.001 & -0.026 (N) \\ 
 		& METEOR & $<$0.001 & -0.029 (N) \\
 		& ROUGE-LCS (f-measure) & $<$0.001 & -0.026 (N) \\ 
 		& LEVENSHTEIN & $<$0.001 & +0.029 (N) \\\midrule
