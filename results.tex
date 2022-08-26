@@ -16,7 +16,7 @@ To facilitate the reading of \tabref{tab:single-train-results}, we briefly expla
 Each row can includes only two out of three symbols: (i) the check mark (\cmark) indicates that the results reported in that row refer to log statements in which the component ($c$) was correctly predicted. The dash mark ($-$), instead, indicates that $c$ can be either correct or wrong for the predictions in that row. Finally, the cross mark (\xmark) indicates that the component was wrongly predicted for the corresponding log statements.
 For instance, the last row of \tabref{tab:single-train-results} reports the results achieved by LEONID and LANCE, when the two models correctly synthesized the log variable name, the log level and the entire the log statement has been injected in the correct position. In such a case however, the log message has been wrongly predicted, as it can be seen thanks the cross mark (\xmark) in the log message column.
 
-The last two columns of \tabref{tab:single-train-results} report the $p$-value and the Odds Ration (OR) effect size we compute using the Mc-Nemar's test \cite{mcnemar}.
+The last two columns of \tabref{tab:single-train-results} report the $p$-value and the Odds Ratio (OR) effect size we compute using the Mc-Nemar's test \cite{mcnemar}.
 
 By Comparing the correct predictions (\ie first row of \tabref{tab:single-train-results}) achieved by LEONID and LANCE, it emerges that LEONID performs slightly better than LANCE, achieving 27.26\% of correct predictions against 26.79\% achieved by LANCE. As it can be seen, the (adjusted) $p$-value indicates a statistically significant difference, with LEONID having 1.12 higher odds of providing a correct prediction compared to LANCE. 
 As for the other ``components'', what emerges is that LEONID performs slightly worse compared to LANCE.
@@ -140,8 +140,41 @@ As for the naive classifiers, we found out that when using the \textit{optimisti
 In contrast, the \textit{pessimistic} performs better than LEONID (as expected), achieving 0.97 for both accuracy and precision, and 1.0 for recall.
 The \textit{random} classifier, on the other hand, would ensure accuracy of 0.50, and a recall of 0.53, while achieving only 0.02 of precision.
 
-\ANTONIO{ If we have space, we can add the statistical analysis on the classifiers}
 
+\begin{table}[ht]
+	\centering
+	\caption{Statistical Tests: LEONID \emph{vs} NAIVE Classifiers\vspace{-0.2cm}}
+	\scriptsize
+	\label{tab:statistical-classifier}
+	\resizebox{.5\textwidth}{!}{
+		\begin{tabular}{llrc}
+			\toprule
+			\textbf{Test Set} & \textbf{Metric} & \textbf{\emph{p}-value} & \textbf{OR} \\ 
+			\midrule
+			\multirow{3}{*}{Need4Log: (50-50)} 
+			& Optimistic \emph{vs} LEONID & $<$0.001 &18.57 \\ 
+			& Pessimistic \emph{vs} LEONID & $<$0.001 & 50.28 \\ 
+			& Random \emph{vs} LEONID & $<$0.001 & 27.12 \\\midrule
+			\multirow{3}{*}{Need4Log: (75-25)} 
+			& Optimistic \emph{vs} LEONID & $<$0.001 & 6.17 \\ 
+			& Pessimistic \emph{vs} LEONID & $<$0.001 & 140.43 \\ 
+			& Random \emph{vs} LEONID & $<$0.001 & 21.41 \\\midrule
+			\multirow{3}{*}{Need4Log: (25-75)} 
+			& Optimistic \emph{vs} LEONID & $<$0.001 & 54.58 \\ 
+			& Pessimistic \emph{vs} LEONID & $<$0.001 & 16.73 \\ 
+			& Random \emph{vs} LEONID & $<$0.001 & 33.77 \\\midrule
+			\multirow{3}{*}{Need4Log: (2-98)} 
+			& Optimistic \emph{vs} LEONID & $<$0.001 & 1,426 \\ 
+			& Pessimistic \emph{vs} LEONID & 0.63 & 1.05 \\ 
+			& Random \emph{vs} LEONID & $<$0.001 & 56.53 \\\midrule
+		\end{tabular}
+	}
+	\vspace{-0.2cm}
+\end{table}
+
+
+The results of the statistical comparison made using McNemar’s test are reported in \tabref{tab:statistical-classifier}.
+As it is shown, LEONID has a positive (OR$>$1) and statistically significant effect in all cases but one. When testing LEONID against the Need4Log (2-98) dataset, we found that for the comparison \textit{Pessimistic} \emph{vs} LEONID, although the OR$>$1, the $p$-value of 0.63 points out to a non statistically significant effect. Such a results is indeed expected, seen the distribution of the labels (\ie \textit{Need}, \textit{No need}) featuring the Need4Log (2-98) dataset. 
 
 
 \begin{figure*}[h!]
@@ -150,6 +183,8 @@ The \textit{random} classifier, on the other hand, would ensure accuracy of 0.50
 	\includegraphics[width=\textwidth]{img/RQ3-CM.pdf}
 	\caption{Results achieved by LEONID when deciding whether log statements are needed or not in \java methods. For each test-set (\tabref{tab:ds-summary-2}), accuracy, precision and recall are reported.}
 \end{figure*}
+
+
 
 %complementarity
 %Shared:  72.05602393255371
