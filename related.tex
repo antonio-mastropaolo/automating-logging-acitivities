@@ -5,28 +5,28 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We focus our discussion on studies aimed at (i) automating logging activities and (ii) combining deep learning and information retrieval to automate code-related tasks. Due to space constraints, we point the reader to the literature review by Watson \etal~\cite{watsonSytematicLiterature2020} for a discussion of additional applications of deep learning for the automation of software engineering tasks.
+Due to space constraints, we only focus our discussion on studies aimed at automating logging activities. We point the reader to the literature review by Watson \etal~\cite{watsonSytematicLiterature2020} for a discussion of additional applications of DL to SE.
 
-\subsection{Automating Logging Activities}
+%\subsection{Automating Logging Activities}
 
 %Log analysis is a popular practice that supports developers in software maintenance tasks such as software testing~\cite{chen2018automated,chen2019experience}, debugging~\cite{satyanarayanan1992transparent}, diagnosis~\cite{zhou2019latent,yuan2012improving}, and monitoring~\cite{hasselbring2020kieker,harty2021logging}. Nonetheless, augmenting source code with correct log statements is a non-trivial manual activity that require developer's experience~\cite{li2020qualitative,yuan2012characterizing}. For this reason, researchers started investigating how to support developers with automatic log injection.
 
-Zhu \etal~\cite{zhu2015learning} pioneered the research in this area by presenting \textsc{LogAdvisor}, a tool to recommend where to inject log statements in the source code. The authors evaluated \textsc{LogAdvisor} on two Microsoft systems and two open-source projects. They reported an accuracy of 60\% when the tool is triggered to inject log statements on pieces of code without log statements.
+Zhu \etal~\cite{zhu2015learning} pioneered the research in this area presenting \textsc{LogAdvisor}, a tool to recommend where to inject log statements. The authors evaluated \textsc{LogAdvisor} on two Microsoft systems and two open-source projects, reportinga 60\% accuracy when the tool is triggered to inject log statements on pieces of code without log statements.
 
-Yao \etal~\cite{yao2018log4perf} have focused on a similar sub-problem: Their approach (Log4Perf) suggests log locations for the performance monitoring of web-based systems. The evaluation performed on two open-source and one commercial system showed the ability of Log4Perf to identify locations in code having a statistically significant influence on performance.
+Yao \etal~\cite{yao2018log4perf} focused on a similar sub-problem: Their approach (Log4Perf) suggests log locations for the performance monitoring of web-based systems. The evaluation showed the ability of Log4Perf to identify locations in code having a statistically significant influence on performance.
 
-Mizouchi \etal \cite{mizouchi2019padla} presented \textsc{PADLA}, an extension of Apache Log4j aimed at dynamically changing the level of log statements to optimize the amount of information logged at runtime. For example, more verbose information are stored in case of performance anomalies.
+Mizouchi \etal \cite{mizouchi2019padla} presented \textsc{PADLA}, an extension of Apache Log4j aimed at dynamically changing the level of log statements to optimize the amount of information logged at runtime (\eg more verbose in case of performance anomalies).
 
-Li \etal~\cite{li2020shall} were the first proposing the usage of DL to support logging activities. Their approach aims at recommending logging locations using and can achieve an 80\% accuracy in the within-project setting, and a 67\% in the more challenging cross-project scenario.
+Li \etal~\cite{li2020shall} were the first proposing the usage of DL to support logging. Their approach aims at recommending logging locations and can achieve 80\% accuracy in the within-project setting, and 67\% in the cross-project scenario.
 
 Li \etal \cite{li2021deeplv} lately proposed \textsc{DeepLV}, a tool to ``refactor'' the level of existing log statements in Java methods. \textsc{DeepLV} exploits both syntactic and semantic code information, and achieved new state-of-the-art results for such a task.
 
-Lastly, Mastropaolo \etal~\cite{mastropaolo2022using} introduced \textsc{LANCE}, a tool to inject complete log statements by automatically selecting a proper log level, log message and log location. We discussed the limitation of \textsc{LANCE} in \secref{sec:intro} and explained how we tried to overcome them with \approach. The latter, achieved new state-of-the-art results in the automated generation and injection of complete log statements, even supporting the scenario in which multiple log statements must be injected.
+Lastly, Mastropaolo \etal~\cite{mastropaolo2022using} introduced \textsc{LANCE}, a tool to inject complete log statements by automatically selecting a proper log level, log message and log location. We discussed the limitations of \textsc{LANCE} in \secref{sec:intro} and explained how we tried to partially overcome them. 
 
-\subsection{Combining Deep Learning and IR to Automate Code Related Tasks}
-
-Although DL showed great potential in supporting various software engineering tasks~\cite{watsonSytematicLiterature2020}, recent work showed how its performance can be further boosted by combining it with IR-based techniques. Lam \etal~\cite{LamBugLocalization2017} proposed to use IR alongside DL for bug localization. The IR technique assesses the textual similarity between bug reports and code files. The DL model is then used to learn relationships between terms in the two different vocabularies (\ie bug reports \emph{vs} source code) and compute the final similarity score. The reported results show that DL and IR well-complement each other, with their combination outperforming the individual techniques used in isolation. Similarly, Choetkiertikul \etal~\cite{choetkiertikul2018predicting} proposed to combine IR and DL for identifying software components relevant for a given open issue.
-
-Yu \etal~\cite{yu2022automated} combined DL with IR for the task of automated assertion generation. The idea is to use IR to retrieve the most similar test method to the target one for which an assert statement must be generated. If the similarity between the retrieved method and the target one is higher than a threshold, the assert of the retrieved method is reused. Otherwise, a DL-based approach is used to generate the assert.
-
-In our work, we combine IR and DL to improve the performance of log statement generation, especially for what concerns the definition of a meaningful log message.
+%\subsection{Combining DL and IR to Automate Code Related Tasks}
+%
+%Although DL showed great potential in supporting various software engineering tasks~\cite{watsonSytematicLiterature2020}, recent work showed how its performance can be further boosted by combining it with IR-based techniques. Lam \etal~\cite{LamBugLocalization2017} proposed to use IR alongside DL for bug localization. The IR technique assesses the textual similarity between bug reports and code files. The DL model is then used to learn relationships between terms in the two different vocabularies (\ie bug reports \emph{vs} source code) and compute the final similarity score. The reported results show that DL and IR well-complement each other, with their combination outperforming the individual techniques used in isolation. Similarly, Choetkiertikul \etal~\cite{choetkiertikul2018predicting} proposed to combine IR and DL for identifying software components relevant for a given open issue.
+%
+%Yu \etal~\cite{yu2022automated} combined DL with IR for the task of automated assertion generation. The idea is to use IR to retrieve the most similar test method to the target one for which an assert statement must be generated. If the similarity between the retrieved method and the target one is higher than a threshold, the assert of the retrieved method is reused. Otherwise, a DL-based approach is used to generate the assert.
+%
+%In our work, we combine IR and DL to improve the performance of log statement generation, especially for what concerns the definition of a meaningful log message.
