@@ -1,0 +1,64 @@
+% !TEX root = main.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work} \label{sec:related}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+In recent years, DL techniques have been increasingly used to support software engineering (SE). The activities commonly supported by state-of-the-art approach include software maintenance and software testing \cite{yang2020survey}, and most of the proposed approaches target the source code \cite{watson2022systematic}. While available approaches support a plethora of concrete SE tasks \cite{yang2020survey, watson2022systematic}, in this section we focus on the ones strictly related to the target of our study: \textit{Automating Logging Activities}. A broader literature review on the topic is available in two recent surveys by Yang \etal \cite{yang2020survey} and Watson \etal \cite{watson2022systematic}.
+
+
+\subsection{Empirical Studies on Logging Practices}
+Yuan \etal \cite{yuan2012characterizing} conducted one of the first empirical study on logging practices in open-source systems, analyzing C and C++ projects. They show that developers make massive usage of log statements and continuously evolve them with the goal of improving debugging and maintenance activities.
+
+Fu \etal \cite{fu2014developers} studied the logging practices in two industrial projects at Microsoft, investigating in particular which code blocks are typically logged. They also propose a tool to predict the need for a new log statement, reporting a 90\% F-Score.
+
+Chen \cite{chen2017characterizing} and Zeng \etal \cite{zeng2019studying} extended the study of Yuan \etal \cite{yuan2012characterizing} to \java and Android systems, respectively. In particular, Chen analyzed 21 Java-based open-source projects while Zeng \etal considered 1,444 open-source Android apps mined from F-Droid. Both studies confirmed the results of Yuan \etal \cite{yuan2012characterizing}, finding a massive presence of log statements in the analyzed systems. 
+
+Zhi \etal \cite{zhi2019exploratory} investigated how logging configurations are used and evolve, distilling 10 findings about practices adopted in logging management, storage, formatting, and configuration quality. Other researchers studied the evolution and stability  of log statements. For example, Kabinna \etal \cite{kabinna2018examining} examined how developers of four open source applications evolve log statements. They found that nearly 20-45\% of log statements change throughout the software lifetime. 
+
+Zhou \etal \cite{zhou2020mobilogleak} explored the impact of logging practices on data leakage in mobile apps. In addition, they propose MobiLogLeak to automatically identify log statements in deployed apps that leak sensitive data. Their study show that 4\% of the analyzed apps leak sensitive data.
+
+Recently, Li \etal~\cite{li2020qualitative} conducted an extensive investigation on logging practice from a developer's perspective. The goal of this research is to push the design of automated tools based on actual developers' needs (rather than on researchers' intuition). 
+
+The authors surveyed 66 developers and analyzed 223 logging-related issue reports shedding light on the trade-off between costs and benefits of logging practices in open source. The results show that developers adopt an \emph{ad hoc} strategy to compensate costs and benefits while inserting logging statements for various activities (\eg debugging). 
+
+The above-described papers lay the empirical foundations for techniques supporting developers in logging activities (including our work). Approaches such as \tool can help in reducing the cost of logging while supporting developers in taking proper decisions when they wish to add log statements.
+
+
+\subsection{Automating Logging Activities}
+
+%Zhu \etal~\cite{zhu2015learning} pioneered the research in this area presenting \textsc{LogAdvisor}, a tool to recommend where to inject log statements. The authors evaluated \textsc{LogAdvisor} on two Microsoft systems and two open-source projects, reportinga 60\% accuracy when the tool is triggered to inject log statements on pieces of code without log statements.
+%
+%Yao \etal~\cite{yao2018log4perf} focused on a similar sub-problem: Their approach (Log4Perf) suggests log locations for the performance monitoring of web-based systems. The evaluation showed the ability of Log4Perf to identify locations in code having a statistically significant influence on performance.
+%
+%Mizouchi \etal \cite{mizouchi2019padla} presented \textsc{PADLA}, an extension of Apache Log4j aimed at dynamically changing the level of log statements to optimize the amount of information logged at runtime (\eg more verbose in case of performance anomalies).
+%
+%Li \etal~\cite{li2020shall} were the first proposing the usage of DL to support logging. Their approach aims at recommending logging locations and can achieve 80\% accuracy in the within-project setting, and 67\% in the cross-project scenario.
+%
+%Li \etal \cite{li2021deeplv} lately proposed \textsc{DeepLV}, a tool to ``refactor'' the level of existing log statements in Java methods. \textsc{DeepLV} exploits both syntactic and semantic code information, and achieved new state-of-the-art results for such a task.
+%
+%Lastly, Mastropaolo \etal~\cite{mastropaolo2022using} introduced \textsc{LANCE}, a tool to inject complete log statements by automatically selecting a proper log level, log message and log location. We discussed the limitations of \textsc{LANCE} in \secref{sec:intro} and explained how we tried to partially overcome them. 
+
+Researchers proposed techniques and tools to support developers in logging activities.
+
+\textbf{Log message enhancement.} Yuan \etal \cite{yuan2012improving} proposed \textsc{LogEnhancer} as a prototype to automatically recommend relevant variable values for each log statement, refactoring its message to include such values. Their evaluation on eight systems demonstrates that \textsc{LogEnhancer} can dramatically reduce the set of potential root failure causes when inspecting log messages. Liu \etal \cite{liu2019variables} tackled the same problem using, however, a customized deep learning network. Their evaluation showed that the mean average precision of their approach is over 84\%. \smallskip 
+
+\textbf{Log placement.} Other researchers targeted the suggestion of the best code location for log statements \cite{jia2018smartlog,li2018studying,li2020towards}. For example, Zhu \etal \cite{zhu2015learning} presented \textsc{LogAdvisor}, an approach to recommend where to add log statements. The evaluation of \textsc{LogAdvisor} on two Microsoft systems and two open-source projects reported an accuracy of 60\% when applied on pieces of code without log statements.
+Yao \etal \cite{yao2018log4perf} tackled the same problem in the specific context of monitoring the CPU usage of web-based systems, showing that their approach helps developers when logging.
+
+Li \etal \cite{li2020shall} proposed a deep learning framework to recommend logging locations at the code block level. They report a 80\% accuracy in suggesting logging locations using within-project training, with slightly worst results (67\%) in a cross-project setting. C\^andido \etal \cite{candido2021exploratory} investigated the effectiveness of log placement techniques in an industrial context. Their findings (\eg 79\% of accuracy) show that models trained on open source code can be effectively used in industry. \smallskip 
+
+\textbf{Log level recommendation.} A third family of techniques focus on recommending the proper log level (\eg error, warning, info) for a given log statement \cite{yuan2012characterizing,oliner2012advances}. Mizouchi \etal \cite{mizouchi2019padla} proposed \textsc{PADLA} as an extension for Apache Log4j framework to automatically change the log level for better record of runtime information in case of anomalies. 
+The \textsc{DeepLV} approach proposed by Li \etal \cite{li2021deeplv} uses instead a deep learning model to recommend the level of existing log statements in methods. \textsc{DeepLV} aggregates syntactic and semantic information of the source code and showed its superiority with respect to the state-of-the-art. 
+
+Lastly, in our previous work \cite{mastropaolo2022using} we introduced \textsc{LANCE}, a tool to inject complete log statements by automatically selecting a proper log level, log message and log location. 
+
+\subsection{Combining DL and IR to Automate Code Related Tasks}
+%
+Although DL showed great potential in supporting various software engineering tasks~\cite{watsonSytematicLiterature2020}, recent work showed how its performance can be further boosted by combining it with IR-based techniques. Lam \etal~\cite{LamBugLocalization2017} proposed to use IR alongside DL for bug localization. The IR technique assesses the textual similarity between bug reports and code files. The DL model is then used to learn relationships between terms in the two different vocabularies (\ie bug reports \emph{vs} source code) and compute the final similarity score. The reported results show that DL and IR well-complement each other, with their combination outperforming the individual techniques used in isolation. Similarly, Choetkiertikul \etal~\cite{choetkiertikul2018predicting} proposed to combine IR and DL for identifying software components relevant for a given open issue.
+
+Yu \etal~\cite{yu2022automated} combined DL with IR for the task of automated assertion generation. The idea is to use IR to retrieve the most similar test method to the target one for which an assert statement must be generated. If the similarity between the retrieved method and the target one is higher than a threshold, the assert of the retrieved method is reused. Otherwise, a DL-based approach is used to generate the assert.
+
+In this work, we combine IR and DL to improve the performance of log statement generation, especially for what concerns the definition of a meaningful log message.
