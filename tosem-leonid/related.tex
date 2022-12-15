@@ -43,7 +43,11 @@ The above-described papers lay the empirical foundations for techniques supporti
 
 Researchers proposed techniques and tools to support developers in logging activities.
 
-\textbf{Log message enhancement.} Yuan \etal \cite{yuan2012improving} proposed \textsc{LogEnhancer} as a prototype to automatically recommend relevant variable values for each log statement, refactoring its message to include such values. Their evaluation on eight systems demonstrates that \textsc{LogEnhancer} can dramatically reduce the set of potential root failure causes when inspecting log messages. Liu \etal \cite{liu2019variables} tackled the same problem using, however, a customized deep learning network. Their evaluation showed that the mean average precision of their approach is over 84\%. \smallskip 
+\textbf{Log message enhancement.} Yuan \etal \cite{yuan2012improving} proposed \textsc{LogEnhancer} as a prototype to automatically recommend relevant variable values for each log statement, refactoring its message to include such values. Their evaluation on eight systems demonstrates that \textsc{LogEnhancer} can dramatically reduce the set of potential root failure causes when inspecting log messages. Liu \etal \cite{liu2019variables} tackled the same problem using, however, a customized deep learning network. Their evaluation showed that the mean average precision of their approach is over 84\%.
+
+Ding \etal proposed \textit{LoGenText} \cite{ding2022logentext} ...continue
+
+ \smallskip 
 
 \textbf{Log placement.} Other researchers targeted the suggestion of the best code location for log statements \cite{jia2018smartlog,li2018studying,li2020towards}. For example, Zhu \etal \cite{zhu2015learning} presented \textsc{LogAdvisor}, an approach to recommend where to add log statements. The evaluation of \textsc{LogAdvisor} on two Microsoft systems and two open-source projects reported an accuracy of 60\% when applied on pieces of code without log statements.
 Yao \etal \cite{yao2018log4perf} tackled the same problem in the specific context of monitoring the CPU usage of web-based systems, showing that their approach helps developers when logging.
