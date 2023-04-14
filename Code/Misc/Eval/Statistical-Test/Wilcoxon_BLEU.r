@@ -13,12 +13,12 @@ resBLEU$Wilcoxon.p=c(wilcox.test(bleuLANCE_LEONID1$scoreLANCE,bleuLANCE_LEONID1$
 cliff.delta(bleuLANCE_LEONID1$scoreLANCE,bleuLANCE_LEONID1$scoreLEONID1)
 
 
-resBLEU$Dataset=c(resBLEU$Dataset,as.character("Dataset/Wilcoxon-Data/BLEU-LANCE-LEONID3.csv"))
-resBLEU$Wilcoxon.p=c(wilcox.test(bleuLANCE_LEONID3$scoreLANCE,bleuLANCE_LEONID3$scoreLEONID3,alternative="two.side",paired=TRUE)$p.value)
+resBLEU$Dataset=append(resBLEU$Dataset,as.character("Dataset/Wilcoxon-Data/BLEU-LANCE-LEONID3.csv"))
+resBLEU$Wilcoxon.p=append(resBLEU$Wilcoxon.p,wilcox.test(bleuLANCE_LEONID3$scoreLANCE,bleuLANCE_LEONID3$scoreLEONID3,alternative="two.side",paired=TRUE)$p.value)
 cliff.delta(bleuLANCE_LEONID3$scoreLANCE,bleuLANCE_LEONID3$scoreLEONID3)
 
-resBLEU$Dataset=c(resBLEU$Dataset,as.character("Dataset/Wilcoxon-Data/BLEU-LANCE-LEONID5.csv"))
-resBLEU$Wilcoxon.p=c(wilcox.test(bleuLANCE_LEONID5$scoreLANCE,bleuLANCE_LEONID5$scoreLEONID5,alternative="two.side",paired=TRUE)$p.value)
+resBLEU$Dataset=append(resBLEU$Dataset,as.character("Dataset/Wilcoxon-Data/BLEU-LANCE-LEONID5.csv"))
+resBLEU$Wilcoxon.p=append(resBLEU$Wilcoxon.p,wilcox.test(bleuLANCE_LEONID5$scoreLANCE,bleuLANCE_LEONID5$scoreLEONID5,alternative="two.side",paired=TRUE)$p.value)
 cliff.delta(bleuLANCE_LEONID5$scoreLANCE,bleuLANCE_LEONID5$scoreLEONID5)
 
 

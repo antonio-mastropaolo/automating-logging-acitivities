@@ -13,12 +13,12 @@ resMETEOR$Wilcoxon.p=c(wilcox.test(meteorLANCE_LEONID1$scoreLANCE,meteorLANCE_LE
 cliff.delta(meteorLANCE_LEONID1$scoreLANCE,meteorLANCE_LEONID1$scoreLEONID1)
 
 
-resMETEOR$Dataset=c(resMETEOR$Dataset,as.character("Dataset/Wilcoxon-Data/METEOR-LANCE-LEONID3.csv"))
-resMETEOR$Wilcoxon.p=c(wilcox.test(meteorLANCE_LEONID3$scoreLANCE,meteorLANCE_LEONID3$scoreLEONID3,alternative="two.side",paired=TRUE)$p.value)
+resMETEOR$Dataset=append(resMETEOR$Dataset,as.character("Dataset/Wilcoxon-Data/METEOR-LANCE-LEONID3.csv"))
+resMETEOR$Wilcoxon.p=append(resMETEOR$Wilcoxon.p,wilcox.test(meteorLANCE_LEONID3$scoreLANCE,meteorLANCE_LEONID3$scoreLEONID3,alternative="two.side",paired=TRUE)$p.value)
 cliff.delta(meteorLANCE_LEONID3$scoreLANCE,meteorLANCE_LEONID3$scoreLEONID3)
 
-resMETEOR$Dataset=c(resMETEOR$Dataset,as.character("Dataset/Wilcoxon-Data/METEOR-LANCE-LEONID5.csv"))
-resMETEOR$Wilcoxon.p=c(wilcox.test(meteorLANCE_LEONID5$scoreLANCE,meteorLANCE_LEONID5$scoreLEONID5,alternative="two.side",paired=TRUE)$p.value)
+resMETEOR$Dataset=append(resMETEOR$Dataset,as.character("Dataset/Wilcoxon-Data/METEOR-LANCE-LEONID5.csv"))
+resMETEOR$Wilcoxon.p=append(resMETEOR$Wilcoxon.p,wilcox.test(meteorLANCE_LEONID5$scoreLANCE,meteorLANCE_LEONID5$scoreLEONID5,alternative="two.side",paired=TRUE)$p.value)
 cliff.delta(meteorLANCE_LEONID5$scoreLANCE,meteorLANCE_LEONID5$scoreLEONID5)
 
 

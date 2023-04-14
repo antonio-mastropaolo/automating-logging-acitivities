@@ -13,12 +13,12 @@ sevLEV$Wilcoxon.p=c(wilcox.test(levLANCE_LEONID1$scoreLANCE,levLANCE_LEONID1$sco
 cliff.delta(levLANCE_LEONID1$scoreLANCE,levLANCE_LEONID1$scoreLEONID1)
 
 
-sevLEV$Dataset=c(sevLEV$Dataset,as.character("Dataset/Wilcoxon-Data/LEV-LANCE-LEONID3.csv"))
-sevLEV$Wilcoxon.p=c(wilcox.test(levLANCE_LEONID3$scoreLANCE,levLANCE_LEONID3$scoreLEONID3,alternative="two.side",paired=TRUE)$p.value)
+sevLEV$Dataset=append(sevLEV$Dataset,as.character("Dataset/Wilcoxon-Data/LEV-LANCE-LEONID3.csv"))
+sevLEV$Wilcoxon.p=append(sevLEV$Wilcoxon.p,wilcox.test(levLANCE_LEONID3$scoreLANCE,levLANCE_LEONID3$scoreLEONID3,alternative="two.side",paired=TRUE)$p.value)
 cliff.delta(levLANCE_LEONID3$scoreLANCE,levLANCE_LEONID3$scoreLEONID3)
 
-sevLEV$Dataset=c(sevLEV$Dataset,as.character("Dataset/Wilcoxon-Data/LEV-LANCE-LEONID5.csv"))
-sevLEV$Wilcoxon.p=c(wilcox.test(levLANCE_LEONID5$scoreLANCE,levLANCE_LEONID5$scoreLEONID5,alternative="two.side",paired=TRUE)$p.value)
+sevLEV$Dataset=append(sevLEV$Dataset,as.character("Dataset/Wilcoxon-Data/LEV-LANCE-LEONID5.csv"))
+sevLEV$Wilcoxon.p=append(sevLEV$Wilcoxon.p,wilcox.test(levLANCE_LEONID5$scoreLANCE,levLANCE_LEONID5$scoreLEONID5,alternative="two.side",paired=TRUE)$p.value)
 cliff.delta(levLANCE_LEONID5$scoreLANCE,levLANCE_LEONID5$scoreLEONID5)
 
 
